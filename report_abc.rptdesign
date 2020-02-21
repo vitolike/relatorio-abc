@@ -1,0 +1,1818 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.22" id="1">
+    <property name="comments">IBM Confidential
+
+OCO Source Materials
+
+5724-M19
+
+(C) COPYRIGHT IBM CORP. 2006
+
+The source code for this program is not published or otherwise
+divested of its trade secrets, irrespective of what has been
+deposited with the U.S. Copyright Office.
+
+09-19764@000</property>
+    <property name="createdBy">Eclipse BIRT Designer Version 3.7.1.v20110905 Build &lt;3.7.1.v20110913-1734></property>
+    <html-property name="description">This template will create a report having a single header with multiple rows of data.</html-property>
+    <property name="units">in</property>
+    <method name="initialize"><![CDATA[importPackage(Packages.com.ibm.tivoli.maximo.report.script);
+
+mxReportScriptContext = MXReportScriptContext.initialize(reportContext);
+mxReportScriptContext.setDefaultLogLevel("DEBUG");
+mxReportScriptContext.setDefaultLogFile("C:/eclipse/errores/new_report.log");]]></method>
+    <method name="beforeFactory"><![CDATA[// Remove page break intervals from PDF output
+if ( (reportContext.getParameterValue("usepagebreaks") == "false")|| reportContext.getOutputFormat() == "pdf" ) {
+	// Give each table in the report a name, and add the names to the list below, e.g. ["mainTable", "childTable1"]
+	var tableListing = ["mainTable"];
+	for each(var tableName in tableListing) {
+		var table = reportContext.getReportRunnable().designHandle.getDesignHandle().findElement(tableName)
+		if (table != null)
+		{
+			table.setProperty("pageBreakInterval", 0);
+		}
+	}
+}]]></method>
+    <method name="afterFactory"><![CDATA[MXReportScriptContext.close();]]></method>
+    <property name="theme">MaximoSystemLibrary.maximoTheme</property>
+    <text-property name="displayName">Tivoli Maximo List Template</text-property>
+    <property name="layoutPreference">auto layout</property>
+    <property name="bidiLayoutOrientation">ltr</property>
+    <property name="imageDPI">96</property>
+    <list-property name="libraries">
+        <structure>
+            <property name="fileName">MaximoSystemLibrary.rptlibrary</property>
+            <property name="namespace">MaximoSystemLibrary</property>
+        </structure>
+    </list-property>
+    <template-parameter-definitions>
+        <template-parameter-definition name="NewTemplateParameterDefinition" id="71">
+            <property name="allowedType">Label</property>
+            <text-property name="description">Double-click to enter the report title.</text-property>
+            <default>
+                <label id="72">
+                    <text-property name="text">Report Title</text-property>
+                </label>
+            </default>
+        </template-parameter-definition>
+    </template-parameter-definitions>
+    <parameters>
+        <scalar-parameter name="where" id="25">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <property name="distinct">true</property>
+            <simple-property-list name="defaultValue">
+                <value type="constant">1=1</value>
+            </simple-property-list>
+            <list-property name="selectionList"/>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+            <structure name="format">
+                <property name="category">Unformatted</property>
+            </structure>
+        </scalar-parameter>
+        <scalar-parameter name="appname" id="200">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <property name="controlType">text-box</property>
+            <structure name="format">
+                <property name="category">Unformatted</property>
+            </structure>
+        </scalar-parameter>
+        <scalar-parameter name="paramdelimiter" id="202">
+            <property name="hidden">true</property>
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <property name="controlType">text-box</property>
+            <structure name="format">
+                <property name="category">Unformatted</property>
+            </structure>
+        </scalar-parameter>
+        <scalar-parameter name="paramstring" id="201">
+            <property name="hidden">true</property>
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <property name="controlType">text-box</property>
+            <structure name="format">
+                <property name="category">Unformatted</property>
+            </structure>
+        </scalar-parameter>
+        <scalar-parameter name="usepagebreaks" id="342">
+            <property name="hidden">true</property>
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <property name="distinct">true</property>
+            <simple-property-list name="defaultValue">
+                <value type="constant">true</value>
+            </simple-property-list>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+            <structure name="format">
+                <property name="category">Unformatted</property>
+            </structure>
+        </scalar-parameter>
+        <scalar-parameter name="assetnum" id="512">
+            <property name="valueType">static</property>
+            <property name="dataType">string</property>
+            <property name="distinct">true</property>
+            <list-property name="selectionList"/>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+            <structure name="format">
+                <property name="category">Unformatted</property>
+            </structure>
+        </scalar-parameter>
+        <scalar-parameter name="location" id="513">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <property name="distinct">true</property>
+            <list-property name="selectionList"/>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+            <structure name="format">
+                <property name="category">Unformatted</property>
+            </structure>
+        </scalar-parameter>
+        <scalar-parameter name="data_inicio" id="671">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">dateTime</property>
+            <property name="distinct">true</property>
+            <list-property name="selectionList"/>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+            <structure name="format">
+                <property name="category">Custom</property>
+                <property name="pattern">YYYYMMDD HH:M:SS</property>
+            </structure>
+        </scalar-parameter>
+        <scalar-parameter name="data_termino" id="673">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">dateTime</property>
+            <property name="distinct">true</property>
+            <list-property name="selectionList"/>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+            <structure name="format">
+                <property name="category">Custom</property>
+                <property name="pattern">YYYYMMDD HH:M:SS</property>
+            </structure>
+        </scalar-parameter>
+    </parameters>
+    <data-sources>
+        <script-data-source name="maximoDataSource" id="64" extends="MaximoSystemLibrary.maximoDataSource"/>
+    </data-sources>
+    <data-sets>
+        <script-data-set name="dataSet" id="5">
+            <list-property name="resultSetHints">
+                <structure>
+                    <property name="position">1</property>
+                    <property name="name">assetnum</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">2</property>
+                    <property name="name">description</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">3</property>
+                    <property name="name">location</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">4</property>
+                    <property name="name">operational</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">5</property>
+                    <property name="name">changeby</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">6</property>
+                    <property name="name">downtime</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">7</property>
+                    <property name="name">code</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">8</property>
+                    <property name="name">wonum</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">9</property>
+                    <property name="name">locdesc</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">10</property>
+                    <property name="name">inicio</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">11</property>
+                    <property name="name">termino</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">12</property>
+                    <property name="name">data_emissao</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">13</property>
+                    <property name="name">nq_obs_inat</property>
+                    <property name="dataType">string</property>
+                </structure>
+            </list-property>
+            <list-property name="columnHints">
+                <structure>
+                    <property name="columnName">assetnum</property>
+                </structure>
+                <structure>
+                    <property name="columnName">description</property>
+                </structure>
+                <structure>
+                    <property name="columnName">location</property>
+                </structure>
+                <structure>
+                    <property name="columnName">operational</property>
+                </structure>
+                <structure>
+                    <property name="columnName">changeby</property>
+                </structure>
+                <structure>
+                    <property name="columnName">downtime</property>
+                </structure>
+                <structure>
+                    <property name="columnName">code</property>
+                </structure>
+                <structure>
+                    <property name="columnName">wonum</property>
+                </structure>
+                <structure>
+                    <property name="columnName">locdesc</property>
+                </structure>
+                <structure>
+                    <property name="columnName">inicio</property>
+                </structure>
+                <structure>
+                    <property name="columnName">termino</property>
+                </structure>
+                <structure>
+                    <property name="columnName">data_emissao</property>
+                </structure>
+                <structure>
+                    <property name="columnName">nq_obs_inat</property>
+                </structure>
+            </list-property>
+            <structure name="cachedMetaData">
+                <list-property name="resultSet">
+                    <structure>
+                        <property name="position">1</property>
+                        <property name="name">assetnum</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">2</property>
+                        <property name="name">description</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">3</property>
+                        <property name="name">location</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">4</property>
+                        <property name="name">operational</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">5</property>
+                        <property name="name">changeby</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">6</property>
+                        <property name="name">downtime</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">7</property>
+                        <property name="name">code</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">8</property>
+                        <property name="name">wonum</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">9</property>
+                        <property name="name">locdesc</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">10</property>
+                        <property name="name">inicio</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">11</property>
+                        <property name="name">termino</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">12</property>
+                        <property name="name">data_emissao</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">13</property>
+                        <property name="name">nq_obs_inat</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                </list-property>
+            </structure>
+            <property name="dataSource">maximoDataSource</property>
+            <method name="open"><![CDATA[maximoDataSet = MXReportDataSetProvider.create(this.getDataSource().getName(), this.getName());
+maximoDataSet.open();
+
+var sqlText = new String();
+
+// Add query to sqlText variable.
+sqlText = "select assetstatus.assetnum, asset.description, asset.location, locations.description as locdesc, "
++ " assetstatus.downtime, assetstatus.code, assetstatus.nq_obs_inat,  "
++ " case assetstatus.operational when 0 then 'NAO OPER' when 1 then 'OPER' end as operational, "
++ " assetstatus.changeby, assetstatus.wonum, "
++ "assetstatus.changedate - (.0417 * to_char(assetstatus.downtime)) as inicio, assetstatus.changedate as termino , sysdate as data_emissao "
++ " from asset left join locations on asset.location = locations.location "
++ " left join assetstatus on asset.assetnum = assetstatus.assetnum "
+// Include the Maximo where clause
++ " where " + MXReportSqlFormat.restrictBetweenDays("assetstatus.changedate", params["data_inicio"], params["data_termino"]) 
++ "  and assetstatus.downtime != '0' and "
++ " asset.location IN ((select parent from lochierarchy where location = '" + params["location"] + "'),"
++ " (select location from lochierarchy where location = '" + params["location"] + "')) "
++ " OR asset.assetnum IN ((select parent from assethierarchy where assetnum = '" + params["assetnum"] + "'), "
++ " (select assetnum from assethierarchy where assetnum = '"+ params["assetnum"] +"')) "
++ "  order by assetstatus.operational"
+;
+
+maximoDataSet.setQuery(sqlText);]]></method>
+            <method name="fetch"><![CDATA[if (!maximoDataSet.fetch())
+	return (false);
+
+// Add a line for each output column
+// The specific get method should match the data type of the output column.
+row["assetnum"] = maximoDataSet.getString("assetnum");	
+row["description"] = maximoDataSet.getString("description");	
+row["location"] = maximoDataSet.getString("location");	
+row["locdesc"] = maximoDataSet.getString("locdesc");	
+row["operational"] = maximoDataSet.getString("operational");	
+row["changeby"] = maximoDataSet.getString("changeby");	
+row["downtime"] = maximoDataSet.getString("downtime");	
+row["code"] = maximoDataSet.getString("code");	
+row["wonum"] = maximoDataSet.getString("wonum");	
+row["inicio"] = maximoDataSet.getDate("inicio");	
+row["termino"] = maximoDataSet.getDate("termino");	
+row["data_emissao"] = maximoDataSet.getDate("data_emissao");	
+row["nq_obs_inat"] = maximoDataSet.getDate("nq_obs_inat");	
+return (true);]]></method>
+        </script-data-set>
+    </data-sets>
+    <styles>
+        <style name="crosstab-cell" id="343">
+            <property name="borderBottomColor">#CCCCCC</property>
+            <property name="borderBottomStyle">solid</property>
+            <property name="borderBottomWidth">1pt</property>
+            <property name="borderLeftColor">#CCCCCC</property>
+            <property name="borderLeftStyle">solid</property>
+            <property name="borderLeftWidth">1pt</property>
+            <property name="borderRightColor">#CCCCCC</property>
+            <property name="borderRightStyle">solid</property>
+            <property name="borderRightWidth">1pt</property>
+            <property name="borderTopColor">#CCCCCC</property>
+            <property name="borderTopStyle">solid</property>
+            <property name="borderTopWidth">1pt</property>
+        </style>
+        <style name="crosstab" id="344">
+            <property name="borderBottomColor">#CCCCCC</property>
+            <property name="borderBottomStyle">solid</property>
+            <property name="borderBottomWidth">1pt</property>
+            <property name="borderLeftColor">#CCCCCC</property>
+            <property name="borderLeftStyle">solid</property>
+            <property name="borderLeftWidth">1pt</property>
+            <property name="borderRightColor">#CCCCCC</property>
+            <property name="borderRightStyle">solid</property>
+            <property name="borderRightWidth">1pt</property>
+            <property name="borderTopColor">#CCCCCC</property>
+            <property name="borderTopStyle">solid</property>
+            <property name="borderTopWidth">1pt</property>
+        </style>
+    </styles>
+    <page-setup>
+        <simple-master-page name="maximoLandscape" id="47" extends="MaximoSystemLibrary.maximoLandscape">
+            <overridden-values>
+                <ref-entry baseId="304" name="NewGrid2" id="304"/>
+                <ref-entry baseId="305" id="305"/>
+                <ref-entry baseId="306" id="306"/>
+                <ref-entry baseId="307" id="307"/>
+                <ref-entry baseId="308" id="308"/>
+                <ref-entry baseId="340" name="NewImage1" id="340">
+                    <property name="source">embed</property>
+                    <property name="imageName">Logotipo-300x229.png</property>
+                    <property name="height">48px</property>
+                    <property name="width">67px</property>
+                </ref-entry>
+                <ref-entry baseId="309" id="309"/>
+                <ref-entry baseId="310" name="NewImage" id="310"/>
+                <ref-entry baseId="322" name="NewGrid" id="322"/>
+                <ref-entry baseId="323" id="323"/>
+                <ref-entry baseId="324" id="324"/>
+                <ref-entry baseId="325" id="325"/>
+                <ref-entry baseId="326" id="326"/>
+                <ref-entry baseId="328" name="NewText" id="328"/>
+                <ref-entry baseId="327" id="327"/>
+                <ref-entry baseId="329" name="NewGrid1" id="329"/>
+                <ref-entry baseId="330" id="330"/>
+                <ref-entry baseId="331" id="331"/>
+                <ref-entry baseId="332" id="332"/>
+                <ref-entry baseId="333" id="333"/>
+                <ref-entry baseId="334" id="334"/>
+                <ref-entry baseId="335" name="NewAutoText" id="335"/>
+                <ref-entry baseId="336" id="336"/>
+                <ref-entry baseId="337" name="NewText1" id="337"/>
+                <ref-entry baseId="338" id="338"/>
+                <ref-entry baseId="339" name="NewAutoText1" id="339"/>
+            </overridden-values>
+        </simple-master-page>
+    </page-setup>
+    <body>
+        <table name="mainTable" id="7">
+            <property name="comments">09-19764@000</property>
+            <property name="width">100%</property>
+            <property name="dataSet">dataSet</property>
+            <list-property name="boundDataColumns">
+                <structure>
+                    <property name="name">total_rec</property>
+                    <expression name="expression">Total.count()</expression>
+                    <property name="dataType">any</property>
+                </structure>
+                <structure>
+                    <property name="name">Column Binding</property>
+                    <text-property name="displayName">locdesc</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["locdesc"]</expression>
+                    <property name="dataType">string</property>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">Column Binding_1</property>
+                    <text-property name="displayName">location</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["location"]</expression>
+                    <property name="dataType">string</property>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">Column Binding_2</property>
+                    <text-property name="displayName">assetnum</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["assetnum"]</expression>
+                    <property name="dataType">string</property>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">Column Binding_3</property>
+                    <text-property name="displayName">description</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["description"]</expression>
+                    <property name="dataType">string</property>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">Column Binding_4</property>
+                    <text-property name="displayName">operational</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["operational"]</expression>
+                    <property name="dataType">string</property>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">Column Binding_7</property>
+                    <text-property name="displayName">downtime</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["downtime"]</expression>
+                    <property name="dataType">string</property>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">Column Binding_8</property>
+                    <text-property name="displayName">code</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["code"]</expression>
+                    <property name="dataType">string</property>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">Column Binding_9</property>
+                    <text-property name="displayName">changeby</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["changeby"]</expression>
+                    <property name="dataType">string</property>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">Column Binding_10</property>
+                    <text-property name="displayName">wonum</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["wonum"]</expression>
+                    <property name="dataType">string</property>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">inicio</property>
+                    <text-property name="displayName">inicio</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["inicio"]</expression>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="name">termino</property>
+                    <text-property name="displayName">termino</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["termino"]</expression>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="name">Column Binding_5</property>
+                    <text-property name="displayName">downtime</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["downtime"]</expression>
+                    <property name="dataType">string</property>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">Column Binding_6</property>
+                    <text-property name="displayName">code</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["code"]</expression>
+                    <property name="dataType">string</property>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">Column Binding_11</property>
+                    <text-property name="displayName">changeby</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["changeby"]</expression>
+                    <property name="dataType">string</property>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">Column Binding_12</property>
+                    <text-property name="displayName">wonum</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["wonum"]</expression>
+                    <property name="dataType">string</property>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">Column Binding_13</property>
+                    <text-property name="displayName">operational</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["operational"]</expression>
+                    <property name="dataType">string</property>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">Column Binding_14</property>
+                    <text-property name="displayName">operational</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["operational"]</expression>
+                    <property name="dataType">string</property>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">Column Binding_15</property>
+                    <text-property name="displayName">downtime</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["downtime"]</expression>
+                    <property name="dataType">string</property>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">Column Binding_16</property>
+                    <text-property name="displayName">code</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["code"]</expression>
+                    <property name="dataType">string</property>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">Column Binding_17</property>
+                    <text-property name="displayName">changeby</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["changeby"]</expression>
+                    <property name="dataType">string</property>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">Column Binding_18</property>
+                    <text-property name="displayName">wonum</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["wonum"]</expression>
+                    <property name="dataType">string</property>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">Column Binding_19</property>
+                    <expression name="expression" type="javascript">BirtDateTime.today()</expression>
+                    <property name="dataType">string</property>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">Column Binding_20</property>
+                    <text-property name="displayName">data</text-property>
+                    <expression name="expression" type="javascript">BirtDateTime.today()</expression>
+                    <property name="dataType">string</property>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">SUM_DOWNTIME</property>
+                    <property name="dataType">float</property>
+                    <property name="aggregateFunction">SUM</property>
+                    <list-property name="arguments">
+                        <structure>
+                            <property name="name">Expression</property>
+                            <expression name="value" type="javascript">dataSetRow["downtime"]</expression>
+                        </structure>
+                    </list-property>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">operational</property>
+                    <text-property name="displayName">operational</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["operational"]</expression>
+                    <property name="dataType">string</property>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">downtime</property>
+                    <text-property name="displayName">downtime</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["downtime"]</expression>
+                    <property name="dataType">string</property>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">code</property>
+                    <text-property name="displayName">code</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["code"]</expression>
+                    <property name="dataType">string</property>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">changeby</property>
+                    <text-property name="displayName">changeby</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["changeby"]</expression>
+                    <property name="dataType">string</property>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">wonum</property>
+                    <text-property name="displayName">wonum</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["wonum"]</expression>
+                    <property name="dataType">string</property>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">location</property>
+                    <text-property name="displayName">location</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["location"]</expression>
+                    <property name="dataType">string</property>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">assetnum</property>
+                    <text-property name="displayName">assetnum</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["assetnum"]</expression>
+                    <property name="dataType">string</property>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">description</property>
+                    <text-property name="displayName">description</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["description"]</expression>
+                    <property name="dataType">string</property>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">SUM_DT_OPER</property>
+                    <property name="dataType">float</property>
+                    <property name="aggregateFunction">SUM</property>
+                    <list-property name="arguments">
+                        <structure>
+                            <property name="name">Expression</property>
+                            <expression name="value" type="javascript">dataSetRow["downtime"]</expression>
+                        </structure>
+                    </list-property>
+                    <expression name="filterExpr" type="javascript">dataSetRow["operational"] == 'OPER'</expression>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">SUM_DT_NOPER</property>
+                    <property name="dataType">float</property>
+                    <property name="aggregateFunction">SUM</property>
+                    <list-property name="arguments">
+                        <structure>
+                            <property name="name">Expression</property>
+                            <expression name="value" type="javascript">dataSetRow["downtime"]</expression>
+                        </structure>
+                    </list-property>
+                    <expression name="filterExpr" type="javascript">dataSetRow["operational"] == 'NAO OPER'</expression>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">data_emissao</property>
+                    <text-property name="displayName">data_emissao</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["data_emissao"]</expression>
+                    <property name="dataType">string</property>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">nq_obs_inat</property>
+                    <text-property name="displayName">nq_obs_inat</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["nq_obs_inat"]</expression>
+                    <property name="dataType">string</property>
+                    <property name="allowExport">true</property>
+                </structure>
+            </list-property>
+            <property name="pageBreakInterval">50</property>
+            <column id="83"/>
+            <column id="79"/>
+            <column id="91"/>
+            <column id="87"/>
+            <column id="17">
+                <property name="width">1.65625in</property>
+            </column>
+            <column id="18">
+                <property name="width">1.6666666666666667in</property>
+            </column>
+            <header>
+                <row id="180">
+                    <property name="style">title</property>
+                    <cell id="181">
+                        <property name="colSpan">6</property>
+                        <property name="rowSpan">1</property>
+                        <label id="345">
+                            <property name="fontSize">18pt</property>
+                            <property name="textAlign">center</property>
+                            <property name="refTemplateParameter">NewTemplateParameterDefinition</property>
+                            <text-property name="text">Relatório de Indisponibilidade de Equipamentos</text-property>
+                        </label>
+                    </cell>
+                </row>
+                <row id="166">
+                    <cell id="167">
+                        <property name="colSpan">6</property>
+                        <property name="rowSpan">1</property>
+                        <property name="borderBottomColor">#000000</property>
+                        <property name="borderBottomStyle">solid</property>
+                        <property name="borderBottomWidth">thin</property>
+                        <property name="borderTopColor">#000000</property>
+                        <property name="borderTopStyle">solid</property>
+                        <property name="borderTopWidth">thin</property>
+                        <grid id="109">
+                            <property name="width">100%</property>
+                            <column id="110">
+                                <property name="width">1.5833333333333333in</property>
+                                <property name="style">reportheaderlabel</property>
+                            </column>
+                            <column id="111">
+                                <property name="width">8.291666666666666in</property>
+                                <property name="style">reportheaderdata</property>
+                            </column>
+                            <row id="112">
+                                <cell id="113">
+                                    <label id="118">
+                                        <property name="textAlign">left</property>
+                                        <text-property name="text">Período selecionado:</text-property>
+                                    </label>
+                                </cell>
+                                <cell id="114">
+                                    <property name="paddingLeft">2px</property>
+                                    <grid id="650">
+                                        <column id="651">
+                                            <property name="width">4.114583333333333in</property>
+                                        </column>
+                                        <column id="652">
+                                            <property name="width">4.114583333333333in</property>
+                                        </column>
+                                        <row id="653">
+                                            <cell id="654">
+                                                <property name="textAlign">left</property>
+                                                <grid id="665">
+                                                    <property name="width">1.9583333333333333in</property>
+                                                    <column id="666">
+                                                        <property name="width">1in</property>
+                                                    </column>
+                                                    <column id="667">
+                                                        <property name="width">0.20833333333333334in</property>
+                                                    </column>
+                                                    <column id="820">
+                                                        <property name="width">0.9375in</property>
+                                                    </column>
+                                                    <row id="668">
+                                                        <cell id="669">
+                                                            <data id="672">
+                                                                <structure name="dateTimeFormat">
+                                                                    <property name="category">Custom</property>
+                                                                    <property name="pattern">dd-MM-yyyy</property>
+                                                                </structure>
+                                                                <property name="textAlign">left</property>
+                                                                <list-property name="boundDataColumns">
+                                                                    <structure>
+                                                                        <property name="name">data_inicio</property>
+                                                                        <expression name="expression" type="javascript">params["data_inicio"]</expression>
+                                                                        <property name="dataType">date-time</property>
+                                                                    </structure>
+                                                                </list-property>
+                                                                <property name="resultSetColumn">data_inicio</property>
+                                                            </data>
+                                                        </cell>
+                                                        <cell id="670">
+                                                            <text id="821">
+                                                                <property name="textAlign">center</property>
+                                                                <property name="contentType">auto</property>
+                                                                <text-property name="content"><![CDATA[a]]></text-property>
+                                                            </text>
+                                                        </cell>
+                                                        <cell id="819">
+                                                            <data id="674">
+                                                                <structure name="dateTimeFormat">
+                                                                    <property name="category">Custom</property>
+                                                                    <property name="pattern">dd-MM-yyyy</property>
+                                                                </structure>
+                                                                <property name="textAlign">left</property>
+                                                                <list-property name="boundDataColumns">
+                                                                    <structure>
+                                                                        <property name="name">data_termino</property>
+                                                                        <expression name="expression" type="javascript">params["data_termino"]</expression>
+                                                                        <property name="dataType">date-time</property>
+                                                                    </structure>
+                                                                </list-property>
+                                                                <property name="resultSetColumn">data_termino</property>
+                                                            </data>
+                                                        </cell>
+                                                    </row>
+                                                </grid>
+                                            </cell>
+                                            <cell id="655">
+                                                <grid id="657">
+                                                    <column id="658">
+                                                        <property name="width">2.1041666666666665in</property>
+                                                    </column>
+                                                    <column id="659">
+                                                        <property name="width">1.9479166666666667in</property>
+                                                    </column>
+                                                    <row id="660">
+                                                        <cell id="661">
+                                                            <label id="663">
+                                                                <property name="textAlign">right</property>
+                                                                <text-property name="text">Emissão:</text-property>
+                                                            </label>
+                                                        </cell>
+                                                        <cell id="662">
+                                                            <data id="958">
+                                                                <property name="resultSetColumn">data_emissao</property>
+                                                            </data>
+                                                        </cell>
+                                                    </row>
+                                                </grid>
+                                            </cell>
+                                        </row>
+                                    </grid>
+                                </cell>
+                            </row>
+                            <row id="115">
+                                <cell id="116">
+                                    <label id="119">
+                                        <property name="textAlign">left</property>
+                                        <text-property name="text">Posição selecionada:</text-property>
+                                    </label>
+                                </cell>
+                                <cell id="117">
+                                    <property name="paddingLeft">2px</property>
+                                    <grid id="401">
+                                        <column id="402">
+                                            <property name="width">0.7395833333333334in</property>
+                                        </column>
+                                        <column id="403">
+                                            <property name="width">7.489583333333333in</property>
+                                        </column>
+                                        <row id="404">
+                                            <cell id="405">
+                                                <data id="726">
+                                                    <property name="fontWeight">normal</property>
+                                                    <property name="color">#000000</property>
+                                                    <property name="textAlign">left</property>
+                                                    <property name="resultSetColumn">Column Binding_1</property>
+                                                </data>
+                                            </cell>
+                                            <cell id="406">
+                                                <data id="382">
+                                                    <property name="fontWeight">normal</property>
+                                                    <property name="color">#000000</property>
+                                                    <property name="textAlign">left</property>
+                                                    <property name="resultSetColumn">Column Binding</property>
+                                                </data>
+                                            </cell>
+                                        </row>
+                                    </grid>
+                                </cell>
+                            </row>
+                            <row id="346">
+                                <cell id="347">
+                                    <label id="349">
+                                        <property name="textAlign">left</property>
+                                        <text-property name="text">Ativo selecionado:</text-property>
+                                    </label>
+                                </cell>
+                                <cell id="348">
+                                    <property name="paddingLeft">2px</property>
+                                    <grid id="407">
+                                        <column id="408">
+                                            <property name="width">0.7395833333333334in</property>
+                                        </column>
+                                        <column id="409">
+                                            <property name="width">7.489583333333333in</property>
+                                        </column>
+                                        <row id="410">
+                                            <cell id="411">
+                                                <data id="383">
+                                                    <property name="fontWeight">normal</property>
+                                                    <property name="color">#000000</property>
+                                                    <property name="textAlign">left</property>
+                                                    <property name="resultSetColumn">Column Binding_2</property>
+                                                </data>
+                                            </cell>
+                                            <cell id="412">
+                                                <data id="384">
+                                                    <property name="fontWeight">normal</property>
+                                                    <property name="color">#000000</property>
+                                                    <property name="textAlign">left</property>
+                                                    <property name="resultSetColumn">Column Binding_3</property>
+                                                </data>
+                                            </cell>
+                                        </row>
+                                    </grid>
+                                </cell>
+                            </row>
+                            <row id="413">
+                                <cell id="414">
+                                    <property name="colSpan">2</property>
+                                    <property name="rowSpan">1</property>
+                                </cell>
+                            </row>
+                        </grid>
+                    </cell>
+                </row>
+            </header>
+            <group id="770">
+                <property name="groupName">locationgroup</property>
+                <expression name="keyExpr" type="javascript">row["location"]</expression>
+                <structure name="toc">
+                    <expression name="expressionValue" type="javascript">row["location"]</expression>
+                </structure>
+                <property name="hideDetail">false</property>
+                <header>
+                    <row id="771">
+                        <cell id="772">
+                            <label id="724">
+                                <property name="fontWeight">bold</property>
+                                <property name="color">#444E68</property>
+                                <property name="textAlign">right</property>
+                                <text-property name="text">Posição:</text-property>
+                            </label>
+                        </cell>
+                        <cell id="773">
+                            <data id="785">
+                                <property name="resultSetColumn">location</property>
+                            </data>
+                        </cell>
+                        <cell id="774">
+                            <property name="colSpan">4</property>
+                            <property name="rowSpan">1</property>
+                            <data id="728">
+                                <property name="fontWeight">normal</property>
+                                <property name="color">#000000</property>
+                                <property name="textAlign">left</property>
+                                <property name="resultSetColumn">Column Binding</property>
+                            </data>
+                        </cell>
+                    </row>
+                </header>
+            </group>
+            <group id="803">
+                <property name="groupName">ativogrupo</property>
+                <expression name="keyExpr" type="javascript">row["assetnum"]</expression>
+                <structure name="toc">
+                    <expression name="expressionValue" type="javascript">row["assetnum"]</expression>
+                </structure>
+                <property name="hideDetail">false</property>
+                <header>
+                    <row id="804">
+                        <cell id="805">
+                            <label id="839">
+                                <property name="fontWeight">bold</property>
+                                <property name="color">#444E68</property>
+                                <property name="textAlign">right</property>
+                                <text-property name="text">Ativo:</text-property>
+                            </label>
+                        </cell>
+                        <cell id="806">
+                            <data id="818">
+                                <property name="resultSetColumn">assetnum</property>
+                            </data>
+                        </cell>
+                        <cell id="807">
+                            <property name="colSpan">4</property>
+                            <property name="rowSpan">1</property>
+                            <data id="802">
+                                <property name="resultSetColumn">description</property>
+                            </data>
+                        </cell>
+                    </row>
+                </header>
+            </group>
+            <group id="840">
+                <property name="groupName">operagrupo</property>
+                <expression name="keyExpr" type="javascript">row["operational"]</expression>
+                <structure name="toc">
+                    <expression name="expressionValue" type="javascript">row["operational"]</expression>
+                </structure>
+                <property name="hideDetail">false</property>
+                <header>
+                    <row id="874">
+                        <cell id="875">
+                            <property name="colSpan">6</property>
+                            <property name="rowSpan">1</property>
+                            <grid id="677">
+                                <column id="678">
+                                    <property name="width">0.9791666666666666in</property>
+                                </column>
+                                <column id="679">
+                                    <property name="width">1.3229166666666667in</property>
+                                </column>
+                                <column id="680">
+                                    <property name="width">1.3854166666666667in</property>
+                                </column>
+                                <column id="681"/>
+                                <column id="682">
+                                    <property name="width">0.7291666666666666in</property>
+                                </column>
+                                <column id="683">
+                                    <property name="width">1.1041666666666667in</property>
+                                </column>
+                                <column id="684">
+                                    <property name="width">0.7083333333333334in</property>
+                                </column>
+                                <column id="685">
+                                    <property name="width">2.40625in</property>
+                                </column>
+                                <row id="704">
+                                    <cell id="705">
+                                        <label id="730">
+                                            <property name="fontWeight">bold</property>
+                                            <property name="fontStyle">normal</property>
+                                            <property name="textAlign">left</property>
+                                            <text-property name="text">Tipo</text-property>
+                                        </label>
+                                    </cell>
+                                    <cell id="706">
+                                        <label id="731">
+                                            <property name="fontWeight">bold</property>
+                                            <property name="fontStyle">normal</property>
+                                            <property name="textAlign">left</property>
+                                            <text-property name="text">Inicio</text-property>
+                                        </label>
+                                    </cell>
+                                    <cell id="707">
+                                        <label id="732">
+                                            <property name="fontWeight">bold</property>
+                                            <property name="fontStyle">normal</property>
+                                            <property name="textAlign">left</property>
+                                            <text-property name="text">Termino</text-property>
+                                        </label>
+                                    </cell>
+                                    <cell id="708">
+                                        <label id="733">
+                                            <property name="fontWeight">bold</property>
+                                            <property name="fontStyle">normal</property>
+                                            <property name="textAlign">left</property>
+                                            <text-property name="text">Duração (Horas)</text-property>
+                                        </label>
+                                    </cell>
+                                    <cell id="709">
+                                        <label id="734">
+                                            <property name="fontWeight">bold</property>
+                                            <property name="fontStyle">normal</property>
+                                            <property name="textAlign">left</property>
+                                            <text-property name="text">Codigo</text-property>
+                                        </label>
+                                    </cell>
+                                    <cell id="710">
+                                        <label id="735">
+                                            <property name="fontWeight">bold</property>
+                                            <property name="fontStyle">normal</property>
+                                            <property name="textAlign">left</property>
+                                            <text-property name="text">Reportado por.</text-property>
+                                        </label>
+                                    </cell>
+                                    <cell id="711">
+                                        <label id="736">
+                                            <property name="fontWeight">bold</property>
+                                            <property name="fontStyle">normal</property>
+                                            <property name="textAlign">left</property>
+                                            <text-property name="text"># OS</text-property>
+                                        </label>
+                                    </cell>
+                                    <cell id="712">
+                                        <label id="737">
+                                            <property name="fontWeight">bold</property>
+                                            <property name="fontStyle">normal</property>
+                                            <property name="textAlign">left</property>
+                                            <text-property name="text">Observações</text-property>
+                                        </label>
+                                    </cell>
+                                </row>
+                            </grid>
+                        </cell>
+                    </row>
+                    <row id="841">
+                        <cell id="842">
+                            <property name="colSpan">6</property>
+                            <property name="rowSpan">1</property>
+                            <grid id="856">
+                                <column id="857">
+                                    <property name="width">0.9791666666666666in</property>
+                                </column>
+                                <column id="858">
+                                    <property name="width">1.3333333333333333in</property>
+                                </column>
+                                <column id="859">
+                                    <property name="width">1.375in</property>
+                                </column>
+                                <column id="860"/>
+                                <column id="861">
+                                    <property name="width">0.75in</property>
+                                </column>
+                                <column id="862">
+                                    <property name="width">1.09375in</property>
+                                </column>
+                                <column id="863">
+                                    <property name="width">0.6875in</property>
+                                </column>
+                                <column id="864">
+                                    <property name="width">2.4270833333333335in</property>
+                                </column>
+                                <row id="865">
+                                    <cell id="866">
+                                        <data id="738">
+                                            <property name="resultSetColumn">operational</property>
+                                        </data>
+                                    </cell>
+                                    <cell id="867">
+                                        <data id="739">
+                                            <structure name="dateTimeFormat">
+                                                <property name="category">Custom</property>
+                                                <property name="pattern">dd-MM-yyyy hh:mm</property>
+                                            </structure>
+                                            <property name="resultSetColumn">inicio</property>
+                                        </data>
+                                    </cell>
+                                    <cell id="868">
+                                        <data id="740">
+                                            <structure name="dateTimeFormat">
+                                                <property name="category">Custom</property>
+                                                <property name="pattern">dd-MM-yyyy hh:mm</property>
+                                            </structure>
+                                            <property name="resultSetColumn">termino</property>
+                                        </data>
+                                    </cell>
+                                    <cell id="869">
+                                        <data id="741">
+                                            <structure name="numberFormat">
+                                                <property name="category">Fixed</property>
+                                                <property name="pattern">###0.00{RoundingMode=HALF_UP}</property>
+                                            </structure>
+                                            <property name="resultSetColumn">downtime</property>
+                                        </data>
+                                    </cell>
+                                    <cell id="870">
+                                        <data id="743">
+                                            <property name="resultSetColumn">code</property>
+                                        </data>
+                                    </cell>
+                                    <cell id="871">
+                                        <data id="744">
+                                            <property name="resultSetColumn">changeby</property>
+                                        </data>
+                                    </cell>
+                                    <cell id="872">
+                                        <data id="745">
+                                            <property name="resultSetColumn">wonum</property>
+                                        </data>
+                                    </cell>
+                                    <cell id="873">
+                                        <data id="970">
+                                            <property name="resultSetColumn">nq_obs_inat</property>
+                                        </data>
+                                    </cell>
+                                </row>
+                            </grid>
+                        </cell>
+                    </row>
+                </header>
+            </group>
+            <detail>
+                <row id="531">
+                    <cell id="532">
+                        <property name="colSpan">6</property>
+                        <property name="rowSpan">1</property>
+                    </cell>
+                </row>
+            </detail>
+            <footer>
+                <row id="746">
+                    <cell id="747">
+                        <property name="colSpan">5</property>
+                        <property name="rowSpan">1</property>
+                        <property name="borderBottomColor">#000000</property>
+                        <property name="borderBottomStyle">solid</property>
+                        <property name="borderBottomWidth">thin</property>
+                        <property name="borderTopColor">#000000</property>
+                        <property name="borderTopStyle">solid</property>
+                        <property name="borderTopWidth">thin</property>
+                        <label id="753">
+                            <property name="fontWeight">bold</property>
+                            <property name="fontStyle">normal</property>
+                            <property name="textAlign">right</property>
+                            <text-property name="text">Indisponibilidade total:</text-property>
+                        </label>
+                    </cell>
+                    <cell id="752">
+                        <property name="borderBottomColor">#000000</property>
+                        <property name="borderBottomStyle">solid</property>
+                        <property name="borderBottomWidth">thin</property>
+                        <property name="borderTopColor">#000000</property>
+                        <property name="borderTopStyle">solid</property>
+                        <property name="borderTopWidth">thin</property>
+                        <data id="676">
+                            <structure name="dateTimeFormat">
+                                <property name="category">Short Time</property>
+                                <property name="pattern">Short Time</property>
+                            </structure>
+                            <structure name="numberFormat">
+                                <property name="category">Fixed</property>
+                                <property name="pattern">###0.00{RoundingMode=HALF_UP}</property>
+                            </structure>
+                            <property name="textAlign">left</property>
+                            <property name="resultSetColumn">SUM_DOWNTIME</property>
+                        </data>
+                    </cell>
+                </row>
+                <row id="966">
+                    <cell id="967">
+                        <property name="colSpan">6</property>
+                        <property name="rowSpan">1</property>
+                        <property name="borderBottomColor">#000000</property>
+                        <property name="borderBottomStyle">solid</property>
+                        <property name="borderBottomWidth">thin</property>
+                        <property name="borderTopColor">#000000</property>
+                        <property name="borderTopStyle">solid</property>
+                        <property name="borderTopWidth">thin</property>
+                        <label id="905">
+                            <property name="fontSize">12pt</property>
+                            <text-property name="text">Resumo  da Indisponibilidade</text-property>
+                        </label>
+                    </cell>
+                </row>
+                <row id="911">
+                    <cell id="912">
+                        <property name="colSpan">3</property>
+                        <property name="rowSpan">1</property>
+                        <property name="borderBottomColor">#000000</property>
+                        <property name="borderBottomStyle">solid</property>
+                        <property name="borderBottomWidth">thin</property>
+                        <property name="borderTopColor">#000000</property>
+                        <property name="borderTopStyle">solid</property>
+                        <property name="borderTopWidth">thin</property>
+                        <grid id="918">
+                            <column id="919"/>
+                            <column id="920"/>
+                            <column id="921"/>
+                            <row id="922">
+                                <cell id="923"/>
+                                <cell id="924">
+                                    <property name="colSpan">2</property>
+                                    <property name="rowSpan">1</property>
+                                    <label id="906">
+                                        <text-property name="text">Falhas Operacionais </text-property>
+                                    </label>
+                                </cell>
+                            </row>
+                            <row id="926">
+                                <cell id="927"/>
+                                <cell id="928">
+                                    <label id="908">
+                                        <property name="fontWeight">bold</property>
+                                        <text-property name="text">Duração (Horas)</text-property>
+                                    </label>
+                                </cell>
+                                <cell id="929">
+                                    <data id="934">
+                                        <structure name="dateTimeFormat">
+                                            <property name="category">Short Time</property>
+                                            <property name="pattern">Short Time</property>
+                                        </structure>
+                                        <structure name="numberFormat">
+                                            <property name="category">Fixed</property>
+                                            <property name="pattern">###0.00{RoundingMode=HALF_UP}</property>
+                                        </structure>
+                                        <property name="textAlign">left</property>
+                                        <property name="resultSetColumn">SUM_DT_OPER</property>
+                                    </data>
+                                </cell>
+                            </row>
+                        </grid>
+                    </cell>
+                    <cell id="915">
+                        <property name="colSpan">3</property>
+                        <property name="rowSpan">1</property>
+                        <property name="borderBottomColor">#000000</property>
+                        <property name="borderBottomStyle">solid</property>
+                        <property name="borderBottomWidth">thin</property>
+                        <property name="borderTopColor">#000000</property>
+                        <property name="borderTopStyle">solid</property>
+                        <property name="borderTopWidth">thin</property>
+                        <grid id="935">
+                            <column id="936"/>
+                            <column id="937"/>
+                            <column id="938"/>
+                            <row id="939">
+                                <cell id="940"/>
+                                <cell id="942">
+                                    <property name="colSpan">2</property>
+                                    <property name="rowSpan">1</property>
+                                    <label id="943">
+                                        <text-property name="text">Falhas Não operacionais </text-property>
+                                    </label>
+                                </cell>
+                            </row>
+                            <row id="944">
+                                <cell id="945"/>
+                                <cell id="946">
+                                    <label id="949">
+                                        <property name="fontWeight">bold</property>
+                                        <text-property name="text">Duração (Horas)</text-property>
+                                    </label>
+                                </cell>
+                                <cell id="948">
+                                    <data id="955">
+                                        <structure name="dateTimeFormat">
+                                            <property name="category">Short Time</property>
+                                            <property name="pattern">Short Time</property>
+                                        </structure>
+                                        <structure name="numberFormat">
+                                            <property name="category">Fixed</property>
+                                            <property name="pattern">###0.00{RoundingMode=HALF_UP}</property>
+                                        </structure>
+                                        <property name="textAlign">left</property>
+                                        <property name="resultSetColumn">SUM_DT_NOPER</property>
+                                    </data>
+                                </cell>
+                            </row>
+                        </grid>
+                    </cell>
+                </row>
+            </footer>
+        </table>
+    </body>
+    <list-property name="images">
+        <structure>
+            <property name="name">Logotipo-300x229.png</property>
+            <property name="type">image/png</property>
+            <property name="data">
+                iVBORw0KGgoAAAANSUhEUgAAASwAAADlCAYAAADp7cq9AAAgAElEQVR4nOy9fXRd5X3n+/kpZzS6Gl2N
+                oqWqrnXq8XIdL9dxGOKLdh3XpQ7jOEBISl5KIDIQbUgoTSihlEu5XiyWF0M9lEsS4gBJCEeQ+CQECJeQ
+                lFCGMpQwLj1iDMtxqcfxeFxXR9V4XNf18lJVRdXv/vHsl2fvs490JMt6Oef5rmVrvz772fs8+7t/74/g
+                4DAf8HyATqAT1Q6EdpCuYNsvme0sA3IIq4AcCkjUQjuqLSDHEUDVbBWZAI4CYygjCP8b1SGE0yAngRMo
+                pxA9TmlgfN7u1+GcQKY/xMGhRng+KE2gIDSBbADNg7wv+LsMtBOkHWjHkFUMDf6TKsNSp9hXiQlUT4Gc
+                AD0Nchw4BjqIyCGUN0AngvYmKRVmd88O8wpHWA5nB89vQVmJkAdWAe8DzgPWgrai4RALxCWJFyMCSkpS
+                1vFk7bCIS0EFJGqQxPVErGtYZGeWx0DfAnkddBDlICLHUD3B4MCcPBqHuYcjLIfa4flNKE0ILcAGlA8i
+                ug5YDbIM1a5YAspkoRpgnzeTNkLymqI9xSI3+xAdBxkChhBeQ/lT0NcRmaRUmJjFTTicIzjCcpgevf3L
+                EFmLIan3I2wGOhIqnC3JRJJU1j7IJLWEBEQlZ4XnEu6zh64lWWURUhqZxFVBeMPAS8D3gQOUCkembtRh
+                PuAIy6ESnp9DyQXE9AFgM0bdW5Y4LnrxqSLdZByXeVBAHlW5JrUj67hMwWwaaa02m9gZ4DDwIvAUsB9l
+                gsHC5HQnOsw9HGE5xPD8FaDng3wI9GKQFdkHWjYjQgkKKiUWe5OkJJuU3cmWyLKukXV8Vp9s+1bivHT7
+                VOkPqTaw90+igdQlPA8MU3LENZ9whNXIMDapZkTXovSBbEFYg2p70lCdIgOboEK1kGAdrSSpaD9pw3fG
+                XyzyCttMtZEgJmI1NDwuQUpWuxX7qDTYS6otSBKkaWcMZD+i30dlD8JxZ+uaHzjCakR4fg5YA1yE8kmE
+                jaBB3FM1m1I1PQwqpSd7v70Pkm++LcVY+yokoRTp2M0krp9xbta1otUqBJXZHzIgAMeBb6E8inDISVzn
+                Fo6wGgVGmmo1Xj25DrgQZRWizZUkA5lDI8FHWTahcFOayKboVzVjezXpRjLOy+5gxjXSHsMp+pXZV6z7
+                S0iek8DbiHwbpYBw0hHXuYEjrEaA5+eBraj2IbIFyFW8vBUBmzbpWMu2RJIlCaXtQRVeRCpJr4IjLRU0
+                3BgSRYLA0vvTyLC1hR7MBCFWk/7CxZRToOJeEjd1AOU+hGcoFc5k9cph9nCEVa/w/Byq3Yh8CvS3gfUg
+                rdH+mUoY1dS0GSM0xtfQVlVym0a6yiKSipAKu80UqU7ZfbU4ME3OhP07BfICcC/CAWffmjs4wqpHeP1r
+                QK5E9TpEVsQvmaSkhdQLCxnGbKq/zAnDeEqqilarSGO2vUhTbSQEHdvulNWv8FS7/WqkaLUTtl1VuLIN
+                8VXuKXlCsk3zvEcQvQf4DqWBkzicNRxh1Qu8/hzKSuAmkG0Iq1HNZb5g0UtrEU5Fukt8eJIQMlTCqSST
+                imOqnJ+p2oV9scnNVjXDvocdDVBhoJd42b73kBwzvZ92n2yVMtg/1bbEvXMG5SVEbgcOO9vW2cERVj3A
+                89cAfcA1wMqK/dHLK8lfPG3TsaWJqTxvCdNQmoCovm5fI9v+UwXWBbNitrLit9Q6NzPKPuxP2D/bLpVJ
+                PPGxkibSKv1I3KseRdmByJNORZw9HGEtVXh+E9AN6oP0ga4BySXJJHWO7Z5X+yW1X0hISB5p6SxTkkqT
+                BNZLnXHtCjLIIMe0hJNQ8arcZCL8IXWI3bdUFzLvI03ICYJNNx5sT6ibqWbNKceB3SgPMVhwKuIs4Ahr
+                KcLz24FPAZ8BNkTbs6SIrHc7U7qpIilNRXIJ1YjUaErZdiAmMXQEkVHQEZBRVE8iMgkMTSlwxaTWhkgH
+                0AraCbSjdIF0ITQnyC/9PMKGYjtTitgyiDUkropjiZ9HtY5X2u4mQJ5GuZXBwnCVO3WoAkdYSwm9fgvC
+                hcBNqG4B2hLqDCTJIZNILCRe6IR4ZB1DStrKOidxnUlgNPg3BnoU5AjwV8HyEHA6qJAwijCBMgZMMlhj
+                GIDxgLYgkgNaMdH6LSCtmFI3q4F3A+sw+Y8tmAKAzRVkHi5EqmuWSJYlxVUQUYZ6abWV+ADIBKovI3IT
+                pcKhmu7ZAXCEtTRgqnWuB24AfCAIT0i/XFPYjuz99qkVnjB7mSovclrfkdPAEUx9qWOgfwVyEPQIpYGF
+                jUXy/G5gNcoGRN8Dsg5DZJ0V6l3ifqG251rxLOLzEipi5vPbi3Iz6D4GB5wxvgY4wlrMMETVDVwO3IGS
+                x5QQroIMtSXcnlDv0l//DNLLatvsG0P1NCIjwGvAIPAGpqrnCZSxRVvJoNdvAToQOoHNKB9A8DCVT9sq
+                n0FKykqHcVQ8sizDVXhuuDuhek8ichC4DtWSI63p4QhrscIY1TcCO436J1MQFcRklaEDZqqFWS+nLUkk
+                pKoJo9bpayCDoCWQg5QKo7O8u8UDkwWwGfQDIJtQ1lZ6CUmRP/GzrlpWZ4oPQOXvcRD0WkoDpdnfSGPA
+                EdZig+cTVO68BeUaRPMJIqEKKZkDkoZxe3s1Ekvb3c25kyinEYaBl0G/D3IUOF4XJJUFz28FulHdgsgn
+                gQuMQV+aEsdNZRNMH5hFZtnnTwKvA9dRKhycRe8bBo6wFhs8fxtwG+jWSqIipdZRqWYkDOFpmwuVL0wi
+                FosJYD/wCvDnwKuUCqfm9gaXCLz+i0A+BHwC1RUVUfTRhyNYDnbFv4e9bv+OUBm2ETatLyFyLSXnPawG
+                R1iLBV5/N8g1wO1AV7Q9SSjBNqq/LAnuSkla2TbiMdBhYC/Id4G3gBOUCm5KLM9vBlai+glEbsB4HFNh
+                EzbppFXJ9PMPvYdU/lZm/wTwHURuoeTitLLgCGsxwPPXAfcB24jm40tLTTV8pau9SJkR6DIG7AV+CDzv
+                3OtToNcHWIPwCVQ/h7A88dvY9nV7ux1hX/Fbpn5HIVQhJ1D+COFuFxFfCUdYC4levwX0EyA7QNdOP+OM
+                5e2r8PBN9VNG500iMgT6CsijwAHQU5Scd6omeH4OdB3IjRhVsSsh/WaVZ56q1n2ECpHrBHAT8KTLPUzC
+                EdZCwfO7MIPyDyEoopeoKBD+tW1RISy3etqlnohMJ1RJJlGOIDyB8hSm5Il7EWYL48G9GNWbEbZF2yu+
+                G5YkRXKxejoS4W92GPiwM8In4QhrvuH5TZi8v68DG030tX2APciz1EBI5NZFh9rGYGy1722gCPo0MExp
+                wKkZcwETI9cFXA98DtV8ZR5jhvoXQq2FyIli2biM9PwE8BlXCDCGI6z5Rq9/OcIuE+8D06pzFfYse186
+                fCHaPonIfuBR4GlKhZE56LlDFkzp6S2gO0E2IaTCINIe3pTtK9MoHx13BrgV+KaTiA0cYc0Xev120OuB
+                HYh0Ahk2jwxkRacnAhYto6/IOHAAeATlaVxt8fmBMcovR7gD+LRJziZFSBmBpFk2r8r9h1E+xKBzioAj
+                rPmB53cEX+DrmS4PMIFq/u9MHAEGgMcoFYbOvtMOM4YJPv0dlDuQIDQla5qx9M+aFRuXVB+/gfA55zWE
+                dyx0B+oevf4ahC+D9KG0xBwVSEqQtEdVGsyDdckY3DoJUgYeA70RlecZbNBAz8WA8ps/Z/l7B4GfIrwP
+                eGfCi5gOFAUzBsKQhsjrGy4TjoMe4Kf0vPcw5Tfn514WKRxhnUt4/WsQeRS4GHhHNFDDMRkvkBikFQM7
+                i6wYB3kWuAX4FqWBv2f4Taf+LTSG35wk/97/AfpXqJyP8ItA/FPb9sho2SarcFO4LIC2AS0gf0L5zZ/P
+                380sPjiV8FzB87cCXwLWgTYlJKapotEzk5DDzQrIOOgBkJ3Ay86DtEhhQh9Wg34b5QJEmpIeXfsDBdNO
+                N2bSpj5AqfDKPPR+0cIR1lyjt78JuAiR3aBrY6IK1b8sN7dWNBMcEC8a8hpF9YsIj1AaOHYuuu8wh+j1
+                QfQ8VB5F9ILKA9Jis2aMD8WqDPEMQh+lwti89H8RwqmEcwnPb0LkSpCvIaw0qpwtIUks7iekKqn8Fxlk
+                BYQJRF4MvIzfYXDgH+bxrhxmi+E3oee9/wtkEJGtIJ3xB8y2WVpmAdtCgCRtW8Ivorqf/IZDjWrLcoQ1
+                VzAqwGWgD4D8Uhx3AzFxZbmFqngJo/M4hepXELmN0sB/Z/gtZ6daSii/Bfn3HgcOAVsRaauUsFNjo2I7
+                4Xj4P4AxRF6k/GZDegybpj/EYVoYsroS9BGQ5dH22JtnbbDippTgC5qhGipjKK8B70fkTkqFE+es/w7n
+                FiYW7kXgJpTTsRRt2yuj/wJkGODN+sdQltOgcBLW2cJEOl8GPIDIsvgLaUtRKSNqemLRhFoAIOOI3I/w
+                f1Mq/Iyy8/4teZTfVHreewT0nQj/F7bXOGs2nurW5RZEjlF+8y/OeZ8XIRxhnQ28fiNZiTwcua8jAylV
+                BqG1Esbg2FDeQOT3gG9QKvzjPN2Jw3yg/OYE+Q2vYybC+NXEjx9KUolxkrZnRn//LfkN36f8ZsMZ351K
+                OFsYyepSkPtAu5KOvtBmJfHgi4yo4bodgyOATIK8BHIt8JyLaq5TlAqngZ3A4WRxRivuSq2wlgiJsZLH
+                zKLUcMgtdAeWMC5C5AHQ5ZXaX7AhXS3ULtRmk5bqSYRdIN9cipHq5SJNQBvQDLRjxlUO6LCjOSI/hGXK
+                C8wz45hE30lVToswAZzq6aM+SVs5gMjdCLtB25NpO7apQGLSUmtMieRRLsLz9zZarqiLw5oNPP98lMcR
+                zquQ12tJaCbcrWAmFt0B+p2lUPqlXKQNWA2sAFar8ssidKN0ILSgtCM0AzkNSj3bHE6wnKprNwacRplE
+                OAWMK5wUOA38LTCEqQ91GBjp6WPpv6S9fhvC94BLo23hmEjE7tlqYmJMvQpcUreTglSBI6yZwvPXgj4O
+                4lWSVXBMNLhIiBGpbROY+un9KAcYLMzTDUyPoSJtYuqX51HyCP8eOE9hrRB4qJSmYPQ0mVUSWSfROiSI
+                KvH+ETvHsoL9g9Mng12TwfYxlAMKhxH+EjgqMKzKMRFOLiky6/XXgf4ZwrL4hrVyvETeZctJozKO6K9Q
+                GmioRHenEs4EvX4Hqncj4gGVQlSo86TfyvBYIAoehZdAbwE5uBjIaqhIB8qFIvyGKuvUlEtZIdCZeS+p
+                T13C0WmZ5yJKt7Xj1PnRYvb2IK2JpoAE2xA2CmxU2C4whjIicEThyFCRvxQzweuhJUBehxHZg/IFRON3
+                0f4ORhsgmSyvzahswEifDQMnYdUKz28H/RLKNSC5pPiQjqexFqInHB13BngMU5htnNL8k1W5SE6NWrda
+                lF9X2CbCeowNKgn71qwIjArOSotNUmVXVhRHcNC05c+ncPsnNimTwBDCS8B/wdQIO9TTx+JTn3r7VyLy
+                p6BrEh7ChME9gFT8EA9RKnxuvrq6GOAIqxaYcrhfQHUXJg4mdUBa95kSO1Aemk/jerkICk1ipmS/GPiQ
+                KusFVqrQliCTjFvIssal7cRMQzaacey0T80y52Rew9KS0m1a7U4ARzGk9V+BJ4Ehhcl83xQdnk94/i5U
+                /xCwCFmyHxpYxK2vAJcwONAw4Q2OsKaDiWK/HNVHEOlMFmQjQ98hJdJHLDAMeg/IN+YrZKFcJAesBTzg
+                t1TZKhIUELT6mH4/IlTxG1RzJyTUvwCVcytknDONfwIsB2uVdiqOTdvS4nPGVdknwuOqvC7C2z19LOwc
+                jF7/CuDPUFYnpwYjKaGnJylB3gY+2khTtDkb1nRQVgO7orLGds0ixRLP4xOiP1ExNsZAb0flSQbPLVkN
+                FUGgBWUTSp/CJhFWA7msWcRsNayarTfTCZoBqVhItVvlnEwJLkU6Fc6yjOuE50RtqvUTxOc0i7ARuADh
+                KPB6uUgReBmYWBjJS0ZQnkX090GbEjpzmqmT+nUXIisweYoNASdhTQXP70b1ewhbKgwsGv1nkKkmCigj
+                oLcgck7nmBsqkhNYh5mMtR9lnekXlYyQMupW2I4sQkjETQV/JU0eGfaqNKeEBJK4VoZ9LCoLlUGeCftX
+                6gJ2ufsIqf4n+plWMZW3VXhc4DlVDue3z3MMWK9/AaJ/AnQnbFlB55L3G93QOGZWnW/Na18XEI6wqqHX
+                b0HYgfIHiLbEbwb2Fy75NiRVQIBR4AbMhJhzrnYEtqkcyjoRPgNsU1gtdgZDmhTSLzhJsqgIMbCQPj9r
+                Oe1/yNhcYceqILLwGJJkWREmYR+X2j6tYT77/iYRDgq8gJmJ+8S8Ba96fg7VHyNszXQuRBK7JcEDiOxA
+                +U8MNkYAqUvNqQbRy0D/EKElMWrSA0gxb5NqrIOYwTQCXIfqd84RWbUrXCbwlAh/AXweWCMY9384nlXi
+                5cTbmlYFg3XbPFcB63ypsqySeXi8P3XtdF9sm1qiykr411YTrePs+1TrnCxnm32+vS5Ck8A6hd9X+Gvg
+                0XIRr1zM8J7ONUqFCUQGzMOwbpT0DxLcbPyAfpn01GJ1DGfDSsPzQXUdKjuQ4PnYb0dig7XNflPRMyC3
+                Ac8wOHfTwAcSVbMom4DbUDYidEZXTUklERGkbFLpj3WmsyBDJYtOyVKzMq4RLsehZ1jZSBnnhtfJ6GNa
+                grOlrYSgGzab0b9klZZUe6T2KR3ANcCFCM+W93AvwvFzHNu1DxjCBOumehR+htJsz3LMe7zosyTmAo6w
+                KtEG3IVwXrQlesuI34YEE6QkK+EW0CcpzSlZtaJ4ItyCcCm2ER3rBU+hooqNDZu0LCKpKD1f7UUP/oYf
+                fHt/SjqaBE6pMh5sPi3CmbB/Vvs5hU4x99ak0CFWbFimPSp89Pb9WddO5JjbfU9Lb+G92PdsVlaifAHh
+                SuAb5T080rP9XAVr6hDIq8Cn4huyx5b9g0Wd76aBNCVHWDa8fkCvQORyNBwE9mfbMqakJIpgYI0D94A8
+                M1cG9nKRHEpelTtEuEyV5fYLGr2PIZ+mpJOElzylB6W3R+3YUk1KCgoFyYCQJhUmxHzdJzCkNCTC28Bx
+                4O8wkdhngDNBUjMY295Y4vIaqGRKu5qYsSYxczi2KOQFOkV4F5BHWAEsQ2lWyAUEl5SG0warDDKytfqQ
+                2IQU+cXPapkI/w/CtnKRB1R5VmCsZztzCDkD/CXwCaA5FkXTrGwRl2onIo6wGhLKemAHQnOsQ1jGkGpB
+                fOZTfga4B1PHak5sVuUiXcBnVbhRTF5f4qML8TrW30Q4gD3GqbTpJDyA4bbwP4ufI/UOTgGHNE5I/mtV
+                DolwSOFEfk5f4OooF2lW4xVdCaxH+RWElSqsFlORsylTYrJv0uKCtH0uOi+pWucQNqJ4CE+g7AZen7Ob
+                KhXA81/HJIB3V3hDsJbjwLmGeoczlIgGRW9/G8JulO1ALmGAgYw3HWsgySTCN4Db5mLarcDIeyFwO7AF
+                68NSYUQW611M25usYytILLUejoTEecI4MCYmUvwNTJrLYWAYOAmc6Vkk0eLBM+sCutXYgH5dlM0qrEVp
+                RWghILGEKl3FzpVF7LbkqSYp+yhwP/Cdnj7mJnPB81tQfgq6OnFx2zAY9VdBZAz4xaDOVt3DEVYIz78S
+                +Daqucq0CKxRnhrhMAHyHNA/F4NmqMhqgc8p/K5Ac+JLD0nJJ+yFVukeU2xLIz5mXOFtMaks/wUoAW8v
+                gUTiTJSLLMckSr9fYAPKeQhtmc8s/dNmPbPKYycwsVs7RTgwJ8/J8x9H9RogNQYz+mb02ndSWnp11GaD
+                hhInq8Lz88DNEJBVUuTOEGtCCMA+0B0gZ0VWgYSwCXgAWCdG/YhNZ8HlbPUstMFMR1YVUlVSyphUGBXh
+                BPACyg+AQwjDPX0s+Ry1nj6GgWfKRZ4DliGsAj4owseA5aq0AU12VWtSyzZB2XbC4COSE7gckwJ1V7nI
+                c2ed6qMMIhjCShvU0ja66fKU6gyNdbdZ8PxmTMnaP8Am8KoZvYnP21GQj1Mq7DubLpSLdKpyB8JngfZM
+                yYnKl2iqpOMskkodOwEcxBSC+1OUl3u20zCzSJeLtKiyCeHjwGaB9ao0VYtDs1XlhDodLgTSqcAfA7t7
+                +jg+6855/oWgfz7lMTaRwjsZHHASVoNgFagPgfHS/qIlPrEkRXPVkyA7EfbP9sLlPTQhrFNlp8BlBC78
+                6TQ4tfoXvkgJgRB7LFvEZyK5T6uyD2EAYzA+ll/o5N8FQCA9vlzew2sIeeAiEa5V5TwxKmOTTfahNJtJ
+                ZjGBNaP8AcL6cpGbgaFZqojHQY6j2j11rAogTMLSVNdng8YmLCNd7cDEslgIda9gOZa/iexWwldR9sy2
+                8kJ5D80qXCTKwyKsDLfbRvCEChd2JYXwRUq8SZY0pfF5xxReEHgcoZSv13rpM0TPdsaBI8G/b5aLXAp8
+                FKPmdSUeqyZHA6Q8ioAKLYGKuFxNzbPXZtGtUWAEkW7bA5L0iEQsOoIjrAaAqXG1FdVtFSEK0TIpklAQ
+                mQReAHl4tpUXhoq0AJ8XuEWF5ZFNREiEeKXd8qHAV+HJCrk0XA33C+MCQ2rqzz8rwuFFWcRuEaGnj+fL
+                RV4WYQDlWuATInSQFSYBSfU8hGE1T4SBQNJ6cYY5iWOgx+PxqPHASH+caBw1HhqZsExQ4o2IdBtmUEtU
+                SRuGQvFbwHyJ76JUGJnNRYeKdAO3qYmezknqcokk4LSElTYGQ8KeYqmHk8AhgaLCY/lzFpldnwjUxb3A
+                3qEijwNXqUnTabfjN+3KENHISdocVwsMoNwGzKSiwijIiUxjuy39m/1jOAmrIbAR2BqtRbJ9woBlEBuJ
+                xhC5BzN5xIwwtAdEWAbsVrgsiszO8OolpCX7mLQEBml1cVKEYWCPwiMY+5RT/c4C+T72DhV5S+AHCDdh
+                bF1tkBLCA8aqCEYXuhF2lfcwpsIzNf4e4yinjWQVXsS6QOKiDKOOsOobnt8G3Ay0mA2S+JNA6F5TJhDZ
+                g+rTs0loFuNOfxBlm0yRXZ/OlaswwEuKxOLNpxSeQblPhEP5JRo3tRiRN2r0S+UirwFXAp8DLqhIyE7/
+                JvH6cmC3GKfKnmkvWCqM4/mnSItY9pT28cA4GRjeGwKNR1hePygXIWyKN2YwhB3nYkjrILCLwYEZ2QzK
+                RcAM2Ecwmf9N6cultdCEUTejizbURKLvw9SKfyPfQKEJ842ePsaGinxLTHXS24ErCOZerLBlWTbH4Hfr
+                Bu4d2sOECE9Pa9NKV05M2wHiEP0hnEpYz5BWhBtQuhIxAREy2MSkP+ykVDgy06upskrgQWALoWSVlp4y
+                vsxZklWqdwBDotyvwmP5uUoNcZgSgeR6rLyHmxF+ANwNXKAmWTupDqYQJK4/gJnp+pmpr2SbKCw7QDwm
+                w7H7N2jjqP0Nk+VtYS2wNWm1tq2nlnpo/k2CPony4kwuUi5CuUhehEfU2MqakoMuWwONupGxLawRiKl0
+                8AzwUYSvOrKaf/SYEsovqvJJhIck8NbZMXJZHyJMruO9Q3vYVC5O9f5p/C/DrBo0eBp0eDHMazlfaCwJ
+                q7c/h3ITQnNFmcxIH0t5C5EhlPsYnHGeYB7lEYQtaZtVIm4n+BuWCU5+PCtPUGEEeECUr/RsdyEKC4kg
+                8ftoucgtCj8FdgisAOt3zRbeVweS1lWYZPJK2JJVSH4J8VoxhnlOzNkNLQE0loQlch6mCoKBauUgsIKY
+                AlH7YUx9p5pRLtIO3IuwDWsq9/CvPYhtNUKsfemUGmBChLcEPg580ZHV4kFPHxMIBeC3gDdUmbAFrDCc
+                KiF9wQZV7g9KCFVBaMmXymWzfhKRhgpZaRzC8vqbQLchusJsCMgpMmamovJEAS2h+thMivGVi7QBO1S5
+                AjX11W2pPg1NL1iea9MPwBhV9wAf7eljbyOm0ix25PuYyPfxFvDbwBOQ8T0kYXxoCj5oN5eLobc6jWBc
+                pisthkX94Diqw3N3F4sfjUNYSBvIVYQ5g4k4K3s9+nsakd2I1JzEGtgkrsFMCJGbykgVFZIM121Tmv1p
+                Vk6g/Efgpp4+jtbaF4eFQU8fRxFuAR4S4UzCuackPkxiwmo+j3JZohGTMtaR0CvVIqt4rBxgcKChPl4N
+                RFhsAI3rtFdKMcH2aMcboM/OsNTxZmCnKq2JiqAZl0p4B2NjOlEgs/k0nxDhZoV7evpcuMJSQb6PE8Bt
+                wC5M3mlm6Eqw0IFwZ7nIKquJZtD2pKmCpE5pXMl/fk5vZBGiMQjL83PAdcnYgAy/cwjVU6B3UxqouR5U
+                ucha4F6gK53Vr1mSlqSWbaOHsXe8bfrME/ntTgVcaghyNr+syk4gctiEQ89OqFBMae7AnABKC2bWnhh2
+                wJ5ZGUc4q7JGSxGNQViwCtgApEXqALaoA4j8CKTmwVAuksMEEm4MWqngo5lAlcPA1cCPlmqlTwdDWiJ8
+                EbhPg2m4RCo/YGLewysxs3YDtJgc15TBPcFy+jamTHVDof4Jy1Rl8FBdlfACZplCQ5uRiUqvKYyhXCSn
+                cI2amU4SLacrgUT2U4ssNb1NKYlwdb6PfY6slj56+hhV+KIIOzFlY5LjI7Srm2T8O8pF8oi2At2JWCz7
+                YDNYXoPGk7zrn7DMVO4fQCTpiRGLpMAKfJLXUfZSqjkYb7XArUIgzofNkYyQiGgy5e+OPpxGNTiM8Jme
+                vjmcicVhwRHkIn4ZeCwrRjmU+APVcPsvtP5TO9CdGTFqjJ9nQH5yLmYUX+xoBMJqg5QXBio9cmb0jAIP
+                1lrnasjUYb8dEz1fkT1B+q9t2woDRWPsF+Xqnr7ZVzB1WLzo6eMMyl3AEygTiVpmoSVCaQFuWP8LZz4M
+                2hzFRdhxLmZ9mLOodLuU0QiEdT5CZ3qK4Sp4FeGNWhsWMwXX5Ro8x0RIV7gYSlfWwIw8RhodehLjVSrV
+                em2HpYee7ZxQ4U5MAK1cDNsAACAASURBVHCEaMiY6IWVH/qVv7/C7LEGj/1hFTkIOuO81npA/ROW8qGK
+                +dchGW5OIF0p3wtsWNNiqMgyjHQVeXMiTgztpNb2kLziy0XHnEC5GXipZ7uzWdU7xKTi3IpYRRVjkwAC
+                bFrxszVrOieTZKUJ1/MPKDVW/FWI+iYsz28H9SrKckIqnFwBhhGerzWRVOBiVTYnND5rTNncZOcE2upi
+                QGT3IzzpDOyNgSD/cK+aCViNEd6Kw1Ngeds/Nn1w1d/yDltkjw84hSlv05Cob8KCNYisSIYaB6iUsJ6h
+                VKgpqr1spKvbBJoD20OSoEgGJoeXThV4m0B4QuDLZz2PncOSQk8fE6J8A3gOYnUwHDv/6h0/54pf/R+8
+                89/8nIT4ZY57HphVee56QL0T1iqUZcmIzGBRrU8anEL1B7U0WC7ShPIxhVVpJ04ieF6Sf8NjrODlA8DO
+                epis1GHmCJLXdwFHKiRwYFXn33DBL/1TbE8wGAP+jAYMZwhRv4Tl9TcBv4aEiaWhqEMy5sCsv2YMmTVA
+                6QauFpIJq5G2mYypqjzdHHga4TYxE5k6NCgUDqDcSzjzjW33BK5591/zr3PWRuQw6CszTBerK9QvYSFN
+                KOut9YxFBaOa/QS0tiJ4prTyhorttvEqKzY13GTqb38TeCWwZzg0KPJ9TCI8CXGKjT2M3tX5d6zrmoi3
+                CHuhsRPg65iwNIfo+cFypbU7XDVF0H5EafqJJYIUnBsIZmiOL1Vhn0peNrn+KvAlaJyytg7V0WOqxUb5
+                hrZ6+Iv/5h/ZlP+fYe3lUeCBWsZpPaOOCUvyEM6ca7mGbXYxfw8Ch2ps9HxVzqvwL0qm9hdfNrl+X08f
+                Q066cgih8AbwQmKjQFPTv7Cx5wytuSgVp6GK9WWhjgmLdZWuOuJgqFj2/m4t080HOYMfFklWY4i0P0ua
+                ShNacMwkUABemsW9ONQxBE7/7OQvPD4x2XRKk9vpXX6Ud7b+82lmkN9az6hnwlqdzHAPYcW1qJ6Bmkt0
+                dApchJJLJSvHkevBJttEZkn4Iyjf1gb28Dhko6cPfuvJD0/uPfaeychxE/z9P//1P/Drv/zPh4FXZ5Df
+                WreoX8JS/ZXYbpUmrVBEkv3AsRpbXAl4UbxMRRhXOlIiKcwJfAd4Je9UQYc0PL/lH/+ZS+59410doz9v
+                jbcH4+fW3v82jGrNlW/rGfVJWJ4PIvlEKAOQnIomsl/VOhAuQo2xPa3yaUo/DANHrQDSM8DXe7bP+E4c
+                GgLaBbrlb0+2Nb018u8q7KHL2492DX1hoDXz1AZDfRKWmY23I7OWSxz1PobwX2sp0TG0hybgkjCdKy1d
+                JWYMC5uPt02ifIvaJTmHRoPKhSDn/f2o8OPDPfx88l+lj+gSI+E3POqUsDRn/lEp/sR/x4No82khQh4l
+                b/NUwo5PpeJppSqeFPihs105ZMLzmxG9FgARXjqW5+//KY5JDoZRJyRqvjcs6pSwpBskmO9NYr0tWV9o
+                lBrnG1Q4HzNoUuWzoitEUe5pG78IJcTZrhyqYgsqF4Qrx0418dP/tdasxE6bNjUZFg2POiUsO8mZIOk5
+                0N1Ci7lyjFJh2ploykUQWKNBRVFNGxiqIebJH7h8QYdM9PptwFVIUKIoGFuvHltmVuOPXzPC8qmntm8M
+                1OkDkBwaqoRkhpsjvFZLS6q0Au8WIQfJXK9EJLuaAWarigKnRExGvoNDBYR1qF4BNEVeGpTXh3MT/zL5
+                jrHEd1f5JSC3MB1dPKhTwqIDkbZoECSCWySM8vybWhoSkzydj5LmQ1IKjVZhKEO6OoM55hV1wX4OWfD8
+                JpSrEYm9f0FWxtjEO/YSJMZbWRKd6girbgmrCbV+XLuUQlQWVGutid0KrAwdjKGXsKJ8jKakL2Ec4ccS
+                FGlzcEhhC8IV0Vps/Bx+h0ze8o6mf3kjtGAE0nwn9fu+1oz6fAAKcVU9TUhCwbTfJ5HaZlJWU0YmD7Gw
+                lixRZDcbLJs/I6q85XIGHSrg+W2gV6PalbS3yjjw8OF/6Niv8DM0mMsQEjMvNTLqk7CEMZCxRGZyOIOl
+                CR49hdZmCBdjbG8JV8K/CWkKS0OMyWxIavRCOjQa9ELgCkSaEjSk7AUeolSYEDiiEo9RR1YG9UlYxm4U
+                SFB2dQZCUegUIrWqavlwIYyMSMSN2kZ9yxEJHOzpq02Kc2ggeH4HyM1g2a6MwfMM6C5KhZPBpmOC8y6n
+                0QBGvMQXLNw2ClpTIKcGddsrItzD/RKriin8ZIYddah3eH4O2A5sTmxXGQf9CiKvRtuEYZTxZDTyvPRy
+                UaM+JSzVcVDrx07GGiCcokZjuF0+JnN/qoKNdVitNbYcGgfLgRsxjpwYogcQeZBSIZKoFEaQuMhjbdNq
+                1j/qk7BETgaVRCthmGUSZGaVGy2jeqK5eHf0V5UzKIdn1L5DfcPzm4EdKOsS25URlFspFYbtzfk+Jgg+
+                qkHO/ilwU8HVJ2HBGeMFtGgkDJ6yq+/VgERBtVQZGXtbsrRo8uvo0ODw/CZULwUujwP3ABgDfRDh9Spn
+                DkE0ZI+rujFVn4RVKoyCmEklIkt54CWsDH2fHhrzHaQkc7X+xTuOuWRnhwiqeZCdKN1R/IsZKy8i8hVK
+                A9WM6+PmdBD4O3EfwTolLADVo5FElZCCUvVgaoFViC8KY7A/lFKxfdSZGxwA8PqbgVsQ1scftKgW212U
+                ClNmQgTOnnFVjrvZwevZSyjyZvaOmVkvBU5k1sAiGkzhJnt9CCdhOfT2N4F8DOEaVJuigSOcQPV2RKbN
+                tgiG1xkRhqc+sjFQvxIWHI70uLikTBiH1UKNZK0wIlr5ZbMDRU27iWDSCeeBdkBkBXAn0BkXj9RxVL+E
+                yAvTToiqrAoCkU/hCkAC9UxYqgcQOR1Hc1oWc5FOgnIx00FgHOEETG35qkjVmUWXHeoInt+Gcg9YXkGR
+                CZBvIfLVWirdAi2BReOkNvgEqiHql7CQSdRKcE7kEtKCanP2eRUYQxmuUCTT8QwpxnISVgPD688Bn0W4
+                HLDdynupwW4FMFSkm3jC3gN5lzUB1DNhCROI7DUr6XwaOhNlPabGKMJRsYzsiSA+S9O0kKsWaOrQCJAt
+                wF1oECBqBsd+4OZ0vFXVFmAZAWGpuqyJEPVrdEcnURlEGEVpTelo3UB7jQ2NAgcTKTgSk1ZS04z4K4/Q
+                jDO8Nxa8fkDOB+4F2i05+5jJH6TWkkZgouLNGBJene7gRkH9SlilATCu42MJVjH/clhJzVOhx0Qc/0ys
+                qOPEbGEpCSsgtXbq+dk6ZEOlA9iFmQMgGBRyAmQHpcIr0xrZ7aaU9ZgUnr2CsaE61PtLJRwGDidZJRKL
+                3ltzO2Z2ndMhUWUZ1FMa4HLqWnp1qIDntwF3gW4jfK9MethdwJMzaapcpEXgXUGszH/WamlmDYj6JqxS
+                YQz0h0mKiajl/FqbUVPX6kRFpk+wnIF8ouKpQ33DVGH4LHA9SFMgho8C9wPfqNEjaKMdYbXCcYRX89td
+                wGiI+iYsAOR5YDTS5SC0nK/D62+Z6swQgYfmdduQnslTceWGFnXzyDUGPD+H6uUodyEaziMwinA3whcp
+                FWacTqPQrcp6gQNA6Rz0esmi/glLOY7J2Yr1OTPtVxsqNUtZwA/VZqkUY4nlOQwuNZO2HZYien1AtyDc
+                h9AeDK4JVB4D+X9rmUYuCwLnidCtMNDT5xw3NuqfsGAc1aeA0Tg+XUBoRdiC59fazltQWfI4kVOYSDbk
+                18+u2w6LGp7fhOh5IA+CrDQbdRzRhzCxVrNKVC4XaVL4OGasvTInfa0j1D9hDRYAeQ30YEIsUs2h2kvt
+                4Q3HMYF/CYShDFFIQ/x3bbloZot2qEusBXkEWBPNJA4FkB0MFmbt1VNllcAFwPecd7AS9U9YAMIQyHeB
+                ZE6hyHkYj14tGAN+oMopSNXJqrgcBO2un2WPHRYzPH8F8HUMsYDIGeAukNtmqwaCka5E+AhmToKng5Aa
+                BwuNQVgm/uVpNPT0RQb4VajWZGvq6QOBV0U4lgict1RCSQhwdCucN+SmF68veP5K0AdRNgNNoKPAl4Ev
+                nw1ZBehS+BDwfE+fm3EpC43zMqkOIXzDGEUJ2aUJkavw/JqeQ08fp4GHESbj+SwyKjeYDTmBSyScIsxh
+                6cNIVt8GuTT4Yp0AbgZ2zdZmlcImgZWqfH0O2qpLNA5hDQ5MAE8BRyOWMbU7NgNram1G4SXgcJbDMKog
+                EtfLuhCla07677Cw6PVXgu4G3WxqWzEC3EFp4Jumwu3ZoVwkB1ytypMipjSyQyUah7AM9oM+nkqGbgeu
+                DoL/asFRVQZI5QlGXsKQC81iG8I1c9Jzh4WD5+dBiyiXoTKJyCGUjwOPzeFVtirkRXjchTJUR2MRlrFl
+                fQMRMwWXiXDIgV5MjbmF+T4mRHgCMr6CyXxCA+XD5T10n2XPHRYKnr8SeBCRTSBNwYQR1zJY2DtHaiDl
+                PbQq/JbAD3r6ODgXbdYrGouwAJOMqvdAmJ+lBBn2F82gkaPAI0wx7VI4Zb0KaxG2lZ3xfWmh12/C89cA
+                3wUuQ3UM0edAP8xcR58L6wXWAt+a03brEI33EpUKkyDPAi9bslATcCO9fk01snr6AHgSjcuFhOYriD2G
+                VuWGa9UZ35cWhPNRvg1sNOuyC5XrKA2cnEnVhVqgcDXwXcXVbZ8OjUdYAKXCaZQ7wIQoBEyzHvhsrbYs
+                haMIu1Q5HRWDCEvPVB57kcC2Oeu/w7mD5+fo7d+K6vcR9YIJca8G/uhsAkKzUC5CuchHBNpV2ZN3s+JM
+                i8YkLAhLz9yHcCZgmBaEq1GtKZA038ckyo9EeBXbO5iRFS3QpMpnykU65u4GHM4RrkDk6ybdRg4AnwSe
+                mCt7VQrtwAeBR/LbOWtPYyOgcQnLDMBvAgVr6/kIt9Qcl7WdUVXuBI5AbLeCjEkphM3A5c6WtUjh+e14
+                /u8AjwLdCF8EPshgYd9cq4AWtgD/U6k687NDCo398ph6WfcB+wCCueOuRNlQcxvCAWC3CmO2dzAMqLfQ
+                rnA7tecuOswXevubgXtQ7sNMqXUHcHut9ddng/IeulB+M1AFXQpOjWhswgJQGQJugMidvAxhF71+rarh
+                BPAVUZ4II+AjKUtSEpeyFuX2ctEZ4BcNPH8DIv8f6KcRfQ14H8pD50gFjKDQgbA7v52Rc3mdeoObPi+E
+                538MeBTVDpAJhDspFf5TracP7WGNCEXChFhStd/jbSMI14ryYs/2ueq8w6zg+RuBh4G1qN6F8Bgqx02F
+                D4fFCEdYIUzlyE8jci9KJ8IpoB94rhYbRnkPIGwEvgesSO+P8g3NylsIl+T73Nd1QeD1t6H8DnAbIiXg
+                blTfYHDAeekWORxh2fD8Fkxt7vvNzDqyD+GTlAqHa22iXOSzwH1Ytqr0NIbB8h+j7OjZ7uwX8wrP7wbu
+                RPUKkMcQ7qdUOL7Q3XKoDc6GZaNUGAMeAm5A5CTCBuDr9PbXlLYT4FsoOyF2U1eprPx5hM87r+E8wfOb
+                8fwtqP4YdBXIbyDcjinM6LBE4CSsLMSS1n0YUv8acEet9Y4Co/rDwKch25YFoHBclEsQ9gXR8w5zjd5+
+                EFpQfheRazGF954GPR7MXemwhOAIqxp6+3OIbEf1HkSWg34N5A5KhVO1nF4u0qFwlyifR8hF7sK0ER4O
+                iLGVveFI6xzA698EcgtGkrqXUuHYfF6+XGQZ0N7Tx6H5vG69whHWVOj1c6CXI/Iw0IbqVxDupjRQq6TV
+                qfCAKJ9CkqqfxguTIpRQPoBwxpHWHMDzQWlF9ApULkF4CuUFBs+6ImjNKBcB6AZuUvhxvq9yPgCHmcMR
+                Vi3w/A3A/ShbEB5CdQeDAzVLWpjZfz9PxmzQVmzp88Dn8n0cnYsuNyw8Pwe6EeS3Qf8W5KuBbXLeENgl
+                N6DsUOHr+T5emM/r1zMcYdUKz18N3AtsxRRuu6tW9XBoD50I9wtcCbRkxmfBBMpLIvw2OElrxvB8QNtA
+                rsd4aJ8FPUBp/kIVAqkqp3Axyg4RHgEe63FJzXMGR1gzgec3A78H3BLEUt0CHKI0faDh0B5aBH5XhZ1A
+                W7UHr8rziJO0ZgzPbwfdDrKPUmFBcvMCe9UdwGXAbao866aZn1s4wpopPL8Z5ULQuxEZA25D2cdgDcGl
+                xnv4WeBOVbpE4nI0KtGPMYHyEsINwLG5lLSG9oAYW1oOyKnSJNCOkEdpB/IKTVHlVDuADFDlKMKowFGU
+                UYQJYFJhQmByQSUJk7Ceo1SY9/LCQ3vIieABOzCZDncoPObKxcw9HGHNFp7fjuqtIJchPIiyh8HaXpah
+                IpsFdiucnxFQGuIN4LaevrOf/XdoD+0irAZWA2tUebfAaoRVYCZ7tSPx033K6BuYmvZHMEXnDgP/XZVj
+                wLCYWmHH631evXIRFPJiwlfuUHPvNwEvOjXw3MAR1tnA629G5ULgRuAgwoPAcE0qYpHzBHZi1IesooGT
+                GEnmRoSXZ/Pyl4vkUT6N8B6FcZQJETPBgT01mQjLgC4MoTWj5BCag35lBraGk26EtrigvVHgJCaEYAj4
+                C8xs2fuBMVXG60FFCmxVLapchHCXKOcBB1W4Ld/HSwvbu/qGI6y5gLFtfRrl1xC+h+orDA5MK22VizSj
+                3IlwvcKyKtLWKeBLwBd7+piRW75cpBNoBo7X+sUfKtIlsBJYq8p7MJLZOpSVYgIwKyaNrQHHgTdQ/jQo
+                x1Oa6b0sFpSLtAIb1dgxt4nQpMbDe0u+z9RFczh3cIQ1V/D8JtAVwDaQVtCvURqY1p0e2LUuBB5QWC3G
+                tkRk3zJ/R0XYg/FSHpkvD2J5D6jQLrAc8+83UbYirANaVWmuEsEfq5XWPI0okwjHFQ6L8roKj4qx0y3q
+                apuB6tcqsA5T02wzsEyVMyI8BDzQ0+fqsc8HHGGdC3j9HSCnZ1KpMvAw3aLK9SJJu5K1fEjhtqA0zbzG
+                FqX6ug7YosoHRbgAQ2YxrI5XS0sK9o2L8CIwALzS08fJc9fr2WGoSLvAZoV+gYuBtuCeDgC7evr4zkL3
+                sZHgCGsRIZC2tmK+4p4qzZF0EuMEJg7sfmag6p0LBCpnHuUyhE+irFahBWgiJSWGSNnOQpwG3gYeB15Q
+                ZURgbCHqhQWe1BaMTW+rKteJsFahK+juKPAjhR0oR/Ou2sa8whHWIkRAXL+HyTFcW+WwA8C9qjydX0Bp
+                K0S5SDNwGcrHES6GSinRhl09Ok3Iqjwr8BMVXhM4Oh+kPFQkh7JSYDPCb6rykVDSDfo7KXBA4W7gR/m+
+                hX/mjQhHWIsUgUF+JcKtwEeAZdHOgAUUTgk8B+wG9i+GKc7LRdqB84FrgcsVOlCaQmkLYsnLXs5QG0dR
+                jiEcUvgxyl6EYYExYGy2IRNDptBis5h5IlswM35vAj4ErArWWyGyv00InER5AOHJnj5qro3mMPdwhLUE
+                MLSHCxBuErgUo6qkDdsnRfgmMLBYpjq3KrB+FPgExvM4be2varFfQerSEYSDYqTLMjCscFxMKEXodRzp
+                6WNiqEizmORjMNJehyqdwAoR/h3GgL5alVUiVfs1hKlv9u2e7YvjuTY6HGEtAZSLgNIGrFeTDrRFoEsD
+                ySXABHBE4XGBJzDetwW3rwSS4mqEzarcICZYtT3Vd2AKA32GXqnmfs8EsV+jaHCvwpnAG5kzFRsAEzPV
+                Etim2gmIM5r0NinljQGn1Ez/9hTKAWenWjxwhLXEUC6SU5P+cZWYoNNVUBHIeQR4XI2tZd9C9TWNoSKt
+                KJ4IH8dMAX8+qaDZRO17KqSshNc0jfSx9rYMiS0tyY0qlER5SuFFhMN5l4C+6OAIa4kiMMyvxNi3rlJD
+                XO3WCzohRqV5QWFA4CDKmZ5FEGkeSF3dKqwT5UMIF2HUt44otksT+ZVnjQxv5YQopxGGFF4EnhI4ivG8
+                OixSOMKqA5SLtKpyqcAlCNswcVGRXUaN6vQyyg8VXhRhaDHlug3toRVhvSibFd4jsE5hte2lg5SUNIWb
+                EZLqnrVtDJP3+LYI/w2Tr7m3x3n8lgwcYdURhvbQKsJy4CLgkyhrMQbnluCXHgVGFF4RMx3ZflVO5rcv
+                vHcxRJD60oGxNa0E1gO/ipk6LQ+0KDRJnPMYV7wAglzJCTXJ2WMCh1Q5KvAXCodFOIlJdzrtJKmlB0dY
+                dYpykRzGE7ZJ4TdQNomwgljymsDEFb0K/ESgBItL8spCuchyTH5ktwbhBxFZGRHsOEESdk8fpxesow7n
+                BI6wGgDlIm0oXQrrRHg/ymZguQqdYl76MygnVdgv8BOFV1FGRDipMOrqOjksFjjCakAE0tdqjJfu3Qrr
+                BdZg/uWAcYUjAvuAv1blkMBB4NBC5jA6ODjCanAEEya0Bf86VVkD/HsR1gJrFFqCSgsTGPvQCVX2i/Az
+                jFdtGBMSMCaB3SiIgxpb7Oqlw9KDIyyHqggksS5ghSpdCN1i1v+tKsvEGMDbBU4gnFDoFOUEwrjC/w7S
+                aADGFEYERoDRIMRgZLGXlXFYfHCE5TBjBFJZcxCt3hx47SCYESgR+QmIMImRvsYhihofdxKYg4ODg4OD
+                g4ODg4ODg4ODg4ODg4ODg4ODg4ODg4ODg4ODg4ODg4ODg4ODg4ODg4ODg4ODw7zA5RI6VMLzTQUHZRnQ
+                TnIarDGUkwjHKRUWTaXSOYPnd6JcifAeYCelwshCd8khRg7PzwEe0G0VzZ4ELVEaOLsfq9fvQtgMhDNn
+                HmdwYG/V4z2/BXQ9SBeq+xEZplQ4qy44zACGqNYCVwHng65EpBO1CEsYRRhG9Qi9/ncRXqFUqI8aWZ7f
+                hfIgwmWo5hA5CexY6G5Ni97+FSDrEE4D+ykVzkx7zhKF4PnbUd2NSFtylw6B9FMqvDLr1j3/xyhbrS2n
+                EW6kVHgycVyv34xwObALyAcFbydRfQyRe4GjjrjOITw/h+r5iNyK6mUgrQmpKqrAEE49E049reOIHEa5
+                E+HFJf2ieP6lwE5gA2EZaVMD7D9QKry6kF2rCs9fiXIz6PUIzcE0Q0PArcDz9SgBNwHvAukAzQE5VM0/
+                ZCVw49k1r8sRcgg50BxmFpTVFYcJm4AHQFeBNqM0o7QA12NIrOXs+uEwJZRrEPkecAUibVSbCVkkKBsT
+                WBKEZlTXAY+i3IXXv/R+J89vxvM/BXwd5QKgCdWwPE4O2IHXv3whu1gVqruA3zPChjQj2ozqKpTdwIX0
+                9i90D+ccueirGc08mZi87SP0+hcyONsvjITtWO1mTYHJncCyxLSXAqjkgCtAHwBen/JSnp8DzaOyEtG1
+                qLzCYMFNLz4VPL8V1S+A3oFKWzQTqzWjQzRDazRJYLAcQUDoAH4fZSWe/zlKhePzfzOzgOcvA3ahfAqh
+                2dwbBPcUmjFWgCzDVFZdPOjt34zIZaiG0mAAASEP3IHwMtRXzbGmiEgSc4QHdy80I3o1vf7svpzhlyr+
+                8cm28+uazPMl6COyfsrreP564EHgKUSfAh5GuHhWfW4sXIFwm5Gqgt8n+r0E0GPA0wh/hPAfUZ5DZBgJ
+                PiiJj5s2BS/Q7Uviy97rrwUeAb0GMwuPuZ/4lsYReR7kOlQPLEwnp4KcR9hv82Ok3mE2gmRLyksYZprw
+                cJBG9xstNIFciugAUN1YXhXWlyp8mJkClkxEi+n9ZtK5CaaEPo7KhlhSVECXnnoyX/B8UL0QuBeVjmjG
+                0Xi8vwb6JeBH5tmL+UqLNoE0g/igN6GyNm5UCNT430fkJ/T2P8fgwOL7uhup8lJgN+iySFqMxqicQngd
+                9B6QvZQKi+8eAITJ1NSyKWiVd21pI5dYi+4/8SCWg/Th9e+lNDC7q9jMnylg8TbCymi/po+Xt6e5QEui
+                z1LtR3QAQLUDkZuArsTvYR7hXuAGBgeynvkkMEav/zVE3kB4CnRFkuwE4FZE9gHHzuFdzAyeD9CM6h9E
+                957s9wRQQrkXeA2Rk4vc0bMPZBy0OXEf8f28akitvtCU4KaK9zyi6GtA1s249UgVVEslzDzubswMLME1
+                o6/DGMhXQd+a/lqRIRjLaOqQjY+g+glCAzOEkuwbKFdTKkz9gRgsTFIqlIA+kOHo/Ai6EeXKc9Lz2UJp
+                Bb6EyF2odplhpoCOAq8BHwR+k8HCcwwWFjtZETz/PYiMZ7xjx4D70HokrIR9KUC4GonLtAJXBTFbM0Nk
+                xJ1K6tF9wI0o+40rWSYQTgFfBHZSGqjdPRteywlZ2fD8ZkQ+A6RIXSaB3QwWjsygtTdQnkDVvBgR+ZED
+                rsXrXzw2FAmkw2hdJ4G3QW5A+STwMqXCNKaHRYedwB8jcgrEvDfKAdDrUF5jcJGT7ixgCChNJiIjwLL4
+                pdcmVD4FfB+YXtqJTovam1rdNoT0Ap7/IshyzGzEwzOO64mIVqchyEaGbkNlffx8JCAaeRl4bkZNlQpj
+                eP79qFyP0J7yVK1DZRvwwpx1/Wxg+noPsBaRVtCHEXluSQe9mij8O/H8e4EVwCjCEKWBpUa8NSM2upN4
+                yYeADlRbjLQiACtBP8pMCCsRyTAVYwUwBs6hmtu3oen2nU5YAc9vBt6P0A7Ez8x8mf8z6OkZt1kqDOP5
+                L6H6sSgMIubCD+L5Lywa9apUOInnXweAykjdSCDmwz6Nnbc+0BTYLtLk0gw8QzjBnFGRm1D5NJ7fNeOr
+                JDyQ5xJK5HJ3OmEWuoCLCCO5Q9VZdQR4mdKsvXpPIUzEzz6wqZiUr/zZdnpOUSqMUCrUD1k1GOKgM7WC
+                R1UmgD8BHU2FPCwD3R7knNUITfw5d7DDJhxZVUE36LqEod38vicQzibW6BAwlLB9aiiVLzLCcljSyBn7
+                UoXNZxLlJURKwJbYFkUzKv0IPwIO13aJRHDhubMt2VJVhXo4AxgyXoexCYQYBg4kjLImsn4VyGrQVpRR
+                kBHgbQansYt4fgfKaoROlJxlK5xAZQjRI5QGzoVtZRNKc5QPGMfGvT5tn6fGMMpRkJWAHSi8HGQNdp8h
+                oQAAIABJREFUWVkKvf0g0gG6ApXViO6nNFDjmErBqLp5jNmiGeTFs4qfMhHwG6J1k1NYaZT3+ptB1qIs
+                D9LORlFGER0BOUypMDrNdXKorgXJBzbAMYRRjFnkyILkAnp+B7AapQuhBbQV5BTKCUSPgJw8y2ebA7qB
+                5RiJPy38DAPHQYezwqgCr1+atBQGB47T2/84yJZocBviWoeymVoIK2HPmIZAzI//EVQ7jF1FAXkNOBjZ
+                QIw6uhW0LVJXDTrixTCth1/D86+3QretfkXtg3EB24OxG/huMAjDE46DXAIcpbe/CZEu0NtALgWWobQY
+                9zInEZ6n17+dwdRgNfe3CrgW2IToCrDy9ox3cxLhBMoInv8U8CwwMmfBi0pv9IHCIi2Rn51lyycQRiLz
+                QWj3NKT17sSRng/KOtDPEFYJEZaBPAlcN6Ormo/G54EPAHlUuxFOofpR4GDqWFOJQtlInCt5EtXnGbQ+
+                Dl5/G3AXcEW0TZgAvQl4Es9vQrUVkW2oXoVwPmgn0AYyhjCOykmEQ/T2DyDyowTxmKDdNpCNqF6HyPmg
+                3SCtiI4B46icQNiP5+8GSlW9l4b0VwBbiV/8E6DP1+xZN/FpOdBuVK5H9f2IrAgItBmRFuCMsW/KCMp+
+                PP9R0LdBRqcdm15/DqQFZR3CRcD7gOUBIRpbqiURYX6TU4i8Tm///9/e2cfIVV0H/HdGo9VqZVmW5a4s
+                y3FWjkMdCyGHep4ci6QOdQghKaFQmkCbpPMgkIQS4kYEkYgiFEWUojQfVQqUMgshnwRIAg5RqONS6rh0
+                liJkORZxiUNdx7Jcd7uyVtZqu9rTP+67X++9mXlvdmmjhiPZO7tz77nnfp2ve+65DyO8GPal6cuVnOSJ
+                fA/VzyCyKfiuibKbVvo4U53qTtqB2pX8AXAfImPORBX2A+8FprN+XYLwAEjTbQzX14B4U/cylMvKNciw
+                LDOg78JrAaOonhvVU1mNsCIbk52gdwNbcb4gAMZAV4FMFAL2knQjys3A1X6ScpH/nrw1iGxG2YlwK+jd
+                tNpfY2pyus/gDQazuc8zY5MPvNOl3bnsdhZI0peBRcKL00aTOy9XuolwE8h1MQ0ll+IHgep2RG7FCBm7
+                HhYzbScP48BXEHb6+gDyexjBYIkeBc6BPA45J4uSvxqRNrDD0e7WCiPZfK5B9RyQi0D/nCS9m25nNtME
+                d5nAVb3Y7znxbWtGq+oWRC4B7qSVfrFUAxYZB+4BLonHRa4BqjnplHFEbwRJEdZFDMDvqdVZmqEJhO1A
+                CrIf1ftI0qfolvCBVtpAdBPwftArEdkC2nDKUcRvor2wOhuPbYhch2qHJL0bo3HmruYUT/LOgDwA+llE
+                mu574RxULyNpf7Vv9LvDGQ1Qr4EzGSNic2WM8IqNMA7a9BoSuPIRs7J0qv8qZFpec8LkPJLYfxOidCec
+                NGi1dwF/hckZZRepLyOyCDzsjsqN9NoBfB40wVx1ytESTl7QD/N5PSp3IryFJL0BGD6gURnHJOMrAVmG
+                iHT9md980XxsyJVrYLRSX3ZgnF4PEGkSBr/SB48yCroiCrEx66PI3PJpdAy8ERMK8fuojvm2QidvcODj
+                Dq/kEyj/RJK+ALobJUVk3F0ml6DNPE7VlYjcinAQeKqEzhXY8KMwhEj4zf4DR7Y2dRPoXSiXIpYXhHQE
+                zEWs8FY77juNdskekvQzwPFI2xLWgzwEbDO5xXIb3/2en49wf+gIItdi9tsVwHQmDUMxH0xSt7OI8ATI
+                y86ZrYDqKMgHQMYHDoyGsxK2lYN8h9yvOR+Y3dj2ICo0BS3j0GAjRDjV4/Bm0Z4o3stNmPMg20WYINyD
+                6uZocURt6CFgL2BNkB0o3wS2Yy+aO7QKxmd1AuUEwpw7+LBjbQqOYcyT+1FdWzZ0lUAYR6wEzxoxY3EG
+                WIY8VjLt10eo+eY1p5xWktc060J0qT5waRTICz8H66CMwUmuH2a9fBCVDzpmZduO1l9+kwPKSuBO0CdB
+                PoVLlGnnIKDXm9GeZlP/dpK0yFid6W37Hq6fAaA6ATyEcjlI0+2NkIFG1gvBeLnxWwX6RyjfyQRi2MCY
+                YYjh9b+cdhUKZ82NRZjiR3Un8DmSdNT7sNyP/ATqEeBxRD4dmEhgNIftDAw2jCavBL8tFq2oAu80f5ZD
+                qJ5AZdRrJgrIKlzUvth+nAWdi/xyzsls+8FR4KGIDtduuPgF0DtQ1gUScAHVMwjz2YSPgnwbsOrxJoxm
+                Fdy1U0AWETmN6jdQfoRwMtsQK4w/gxtAN6IyEsxHA6P230jSvm2o8APVVYDH6RfjNMhyOHePZ6Zw7ERV
+                bZCkq+l2MpM21CKlOMd1Ie8WiEzefNncB6t59y0LkfAz8z8HchSTEOBfMMKoBboLZL1fZ1bLl63xHmPO
+                HK6wD+GnIAsIbwQuRWQCtBGsO4CNINuAp3vSWvVAq5WCsAaTZ26HYxZ+vc8hnEDlWeCniMwCK0F/C3gb
+                xlHeDA5syEzh3C0YOYVqF9FLgnmex1wuPw5yAPQXZp8KwJsQPR+VrVj3C4RC7WJgsuk5Xg8u351coJXe
+                g+jHgFXBII2h3EySPt03WjicPPoNavCdM+kKhfYh8hZw2RUtI/ghsMkzK0D1XpB73GREuBwtp+lOzuQI
+                tvU9DUbyhEncTgMPgjwAHDF+ALkAdH8QZXwLxsHr8RqUe4FPIhwqMaf3k6SPoHIDwqfBniAqhknzpyA/
+                AurnJzOO7TEn3SNzZlj1JoIFhy9kQmZO12L9kBAKDJyQWSpEwqoHOO1cgp/9kOa0MMOQ96I8jPBI4RSv
+                1T4H4eug27yWH4yz6gLwHML9wKOFU8Qk/QLwAMiFaCaAjYBZDZxPku6NzK4Cs63A/U3GjZtQvbzoy+QQ
+                KvcgPFg4NDL0rQVSVK5H7Cm6ngXuQSTOF2aCdH8AeiEwj7AP9IfZIUTv3GJJajIPK5tN/51SMgFc3PQL
+                J+KYuU5yCuQRRK8FGt43JFuBi0jSJwb6VuyC6nkJOmg/+DUCs0CK/pZWOl/YdMJ/0O3UPyYP/VJ5Lc9p
+                ZbIb4enAEXoSeNTT034bcJmv74RBF/go3T739bqdUyTpnaiuQbgOpBkwlVHgRpL0IN3OTE8cpSDZAUte
+                JdfTiCzHVY4THq/dqNlnCfMy5ebZCaqlMM1gsnoyIfWLX8omNyinZfToGZR7QT4Pcrr0dEzkZeBzIPcj
+                rIkYsjIHci/C3aAne6TeOQZ8FpNPPwzQbgCvw5hXnknmD5IqaauyHtU/AQlyaSnAQZCrEF7qefLX7Zyk
+                lf4FwjPA7aheiMhLwOOldVQfBxnB+OBepFvp4GgPJpX6k5Gv0PCNVjPyAfRSK7udeZL0Icwp3Xq3KJQV
+                iF4F8gzeFAoJxqvCFvcAdV3IlamwkCMGE2iKw0B0OqieHvP5OOiHmZrc17N+0h4D+QDKKq/tCSY2h9uA
+                wZeLzb23uzCxQNsjuoyz81xMhoE6MIpJfR3MBYCcgUH5xipAtzNDq73o1F6vWTZQ1oENTLUCIScVhtWy
+                IvOd3hs20r77afs5RuaF1d+ieitTfY7xu51FkvQAcAzN0tc4gSVPAbeXnqj5+gDP0mofAfEMy6zHDZiE
+                fT3M9z4Kh4UkbaJ8ktBSMrhPAjcPzNIBMNVZAA6QpH+IyG3AD+h2TpeXnTwJfHEgzhBMCMc+ktTEgDoQ
+                gM0N57izf+udBuYFREwSP6cxKCAXEwbZRRCabQMWpOJ5UxiJXdvBIX7NDQN2A7im3dicQbkDkQHmmGzA
+                DLS//mLgWeDZGqd8x0Ef8BqLw7UG+N2qSAJYk0k7osXdL+3PMJCXSYbRrygWwq+3gaZZv/bU96OfkJKg
+                jBNClPe/cJoMwH9VSkioehqYcaY8WGZcXSiIHIrWsKFjpKSx4sf+JvEm0F2+nILJ0vEodd0MhkndCtpb
+                eC8Nno2sPgBhQy7K1DKvUi1rDvg8qnORSaG6CvSm0iYDq8D8DLlSvqz68qVpm6tCVdW4X30t0o48Cjw4
+                MAWJkqC6ydEBlrF/vVZmgG5nEeTxjFEGhCjApZXxeGggNFz/HK5+ZnpNCMfM0Vz0L0S7y91nHKK98NTY
+                NlcHUaRpRogDZlqTpqnJRVRfKTCQemM8410T/bTPcOACIV/WlHG2b0dkk5tzIyjmgYeGylrR7Zx9FTND
+                /Fu0Ts1YjDQizSbf+QLoISQ7qfB+LFAuIEm3FYtnP0Pp1mvww6PwUiQDoFLerSp4cr/43+/L1OFB9d9R
+                pEGm0QGPaJTDGaykCZm4sp4kHSLQEiLfUsE8XCLYORTo7dS22nnweVjIO42raPKuLuVrToN/YZxYPZgv
+                0FVnjKON2kf7jFwu4tvpZenCO0G9lm3m4ChVEmT+78MpL9D83g5OIqC/UxxQzmLCAGZym3k1cI3x3wQg
+                uc9VNZ9hJX5u/Q6NxPqL7D8D/e+Fgb0n5X1OQLbaDyPDxDrpAvD3JTtmBHOtpQYq9eZaP1/iUiBaS2ET
+                ZfMZmHKwBHJygqqXmRcK5fDrMgUwdCuIeA2uMknB3gjXUVU0bn5Ck6iP6Wrb6Q8NTKYOvxaMlXTgVzZ/
+                ltOcPb1NNxhVzLCpSUjaew1Hlp1eg5IGyuWY49oXSutW8lM48ewnqc5CrmLHV0USMpzKjJYNSBj64Soe
+                zJhPPehOQtJ+BXMpdjQYngZaMwuCyDSqcy541O0HaSybSei6mzOpTSyPJSSuUIworwe2eoiiNBg0+GA1
+                /l62aETiMjDUuvUdaQPGJx+FTu+imAeKx324havzsxqULS8kaQNlBeaS9SjICDacAzYWeBMuzkcCk43+
+                g9udPEOS3gfs9LalgDAO8gHyDCtcxP2cFeG1FGeu1F0lQR+GBXd6FSKpuKGE9WhwvcifRv0SHfIkTplG
+                ZAa1VzAURJoIb6iJZxaTqI+4PzqOSIlDtyYk7RHU3hWz/QaTilhKkjIGNCxpvgIBU+WQRivOa6jV1F2H
+                ClFetrr9cwzV4uoxTs4SCPdVDytJdXPxNFUBGS5DxrBgs5yobAN9EyKbgQ2orEV0DfYucbQ+PO8ohs1X
+                m5yngS5IYqtmjVxOkt5HN3jANI+u1+RFvhWImVwVCBAvRcPK89RaDFBXIeJvD1hmDqeHfvJKZIbo6ozr
+                3ChJOlI5BUkksSNbfQx0GXKvy4ZIc4mivUuYtQuNseWHbjfQrGqUHzinAcOp68fKP0I73D1JnOB0pmmR
+                xMiP57ZLmYYpG0q+X0BZSlqh6pCk40CC8lFEzkV0NeatiIYjJ7TCwgD2IMQoSG0SdmTg7MwAXydM6m8m
+                eB3wIVrtkRhNyEx6TF5IqGMSFSfaKURLsgVjYpyju4ZZqrIeJei7rbskFWIR+3qvldzm82pM7vuKaJhG
+                JBdgqwBNluXBTfWPkULOlNJAw8prr+AOcIaB/L3SEvRR0xL+Ev4MywWWg2lkSKaTw1mnj05zCtZhGX4N
+                Ot3f1/a6QLGwf5vGPPby6kGSjtBK3wM8hup3MVfMNqBZaqXCfOQg3IMqQXqUaDIHTE63s4jqE6CHXWNG
+                cjeB9yCZfyWy8Aap6gEdTrJouXrbs2P0X7BVIVwfw6jzkFs8y6DyWcWo52nqQJhBmTfjY5megLk2s3ST
+                EFlTPmg6R3cyOLCQeNNE17FqQnhhNlIaKyPoUTgwa4fx75WehNfUIp2z39LQS9CHGpb03jPhONk1sNwx
+                eHlopatQPoPwMCaHXrN8fwAwDzoLnEI4hYaM1M9HnFICiFK39IOpyVdI2o8B58dqs5yLyGXAX/pAveD7
+                fncJnZlgF/FgMny5ZTIJLS0RZ6+q1od+hLAPS9KwMnyhxjJUB08iOhf7OxRMbrHVVInA7w9rMFHtxBxf
+                crm2tNiHYQNH86dktbQg6T03kaFRkObVIaSpkhlaQki/pjU3ltKnsNtX4TgtQbMdBEm6AtXbEfkY+Uv3
+                NuQFToJ2EXkJ5BeYk/TjmLxqO0DudP3PSO/x8nNVkK8BHwVdn1t015Ok3yri7oM87yuqvT6GXPRl4JhN
+                foIr0gHhpLAkwvKLzC1Sncc+IV8NToLMRlku/CHLBPD88EQC6DnRHFgpLnIkLhcKr4yWoTZz1DaeqVdE
+                5orl5sahCOe97vwFwjmQYfXQBAI8IiwPQb/7rdO8/9L8ngUTvwpgEh1+hFB7N2TOoRzCJFN8FmUamC3E
+                OCbpyoLVJfnskPV9RycwWQsWYq1MN6Bcjn1ZOlepJ+TVxToqq7Xl3c/qVXOIAskbaCKV8Mk0ijmJi04b
+                dYRWOhw5JrFaI9beAHMBt3rGV3P7/rg3CaON/ebhiAtAeb05JSzAT4t/CjUj6s1z1KYGZiGeKfTcuHkz
+                T4tLPeRRw5pNljFosJbqoHFLT4N/JX0qhDxob5rD2ELfzkrIX5taBkjSdSCfBB11fTdknsE8/PpupjoP
+                0u0cZWpypvz2SI4HZPPR8L+VFB4Ehit+HzieMwNGEd4JwQVg10SPxRTyh2KlweCqDFCjq0BeulY1Wczr
+                MwvxxhFAXo9o/VezAZTViKzKEbBI2WXzwbh+4iSxVdEN2vpR8yG02quAifjYXEBkDjiYJ4Ksadd+v2ju
+                fpCP7h54gTpnX4QnUQUS7TgNof7lmqnfvwBBPwXC0Ykfz16qnOp/F25MCCPUObipAq20AVwNOuETCyqY
+                xzXuRPUuup1TgxFJrjuSaVihFICaAwsoL+Je97XqJqC6jejCZw3EocSsuljs5C2VWTkTJZTcETftR8NJ
+                yDQsS5SpuhYdUvUWjaWgie9ZAH5eHxfdon9SAbZkr6UMB8JaRIJAVtfGMZRXihXsuFQc134QZpd1ikYv
+                JkRQzq6VssWicZ1hTELX1rAaWjY2/ZqOzEW8RldqOcpxr2FF1tBEfQL70aQrgLfgLtpjedZ+4F6mJgff
+                GAlB48+NnkFpVcFoWQ8As5H6JrIWFzYRqO6VVOxwwVRdLNLj8zAQSCJn3lXAKRwFZiNt0lTdAkMEZ5o0
+                y5uA0WjzmERwwzwccQTkeLR5DbFrMTnnhwTZhOpG96vXdI4gufxl0SmnxIxkqKaz/6LpLzOfiDWdvu2J
+                /zEsXRFjrGla5rNK2L+VlYvo7btGD3tTNRqspbsDIpCVoOdEzNRYKN+tncMtL1AkSmcbMq7aG/4w8ERx
+                wHRVpBKHGRnyEGVrIJjwqqBewizluNYy1UiVr+iDMBkkj3o8Dt8Wwis71aEB8ubY76AgchYY5sLqNKpd
+                1ydxG2k1sD27CzkE6Duw2UzdnwD4x4KfLc/7lzJfob+yePezvLz3pwzAWaaNVIS8ElA3hsu6NcJ+lTJh
+                y/BzCkEZyapHUOYjq8X8WIKgKoURYKUfP7Fa5hCX/7UwDo3890MpJ6pngUkgtk1VVsZmXR9NJUr4Hxar
+                ZIrhtCInsYfcBAWeawe9MoYfRniMlBzFXjytB2OYZ6E8czEL97n6GUcBOIPI30H24IXXJBsgV2BybdWD
+                JF0J8v6Sb2aBr5b8fRGT1xs30cNcMAaiU6/Az9G/Drm5zLUr0bjUc0s4lNbSCLWDOi4Raw7maOlVznaq
+                TNv0BJxBeMGtZ8+MJ2i1t1cnbiCMobIu1g4FhnroRPx8ZWPQKJc4NSdoahLgucyf5XFUUr+LNMa0VJ3o
+                wLaQCgt3EA0hznqongNm3Zg6HyFXkbRX1sKkugvHRFyf7EFHfTDJA/eCniqZmy2YRP/VwZis1wFrSjSn
+                vXQ7J4uVdBGTUtpXMAJn+NMqAR/D16+ceGbi5mcA4qrugELVUCsO/lWrHDDMPtp9pMkNQG7z0UeMTcBo
+                RFdkbyYuB8wjzMTXbAACl0E1WB1pjhmi8CHQ4bQrC93OLKJfoCyFa6ji9oJoA0l9Jhf9ooC+rgaGAAIm
+                NZySdhj0WW92ub5sR+U92SnKYGilaxG5KSQp+3wY1fqPUHgER0G+UWLyNIFbSdKtJO2KqNiJ6g2EV7wM
+                gz4FfKVPzYWAkduKEyTplkrtJmmDJD0f2E346vcgC8Ga+eF4VhFsddeBZQjOnLMaU008EQE9iHDuFmJm
+                XI7nBwjHcsy6gcj7Ub2gFklJ2iBpb6TVzjOieWyUekS2vCMTcIPwjpKkV6N8ySkewbg1lsSkCiBdVLvZ
+                Z0+tXSj91OvQaqwiMeK6J+LIdEBlsJqbpE2S9PzsYmZAQIArIq4STKN8H7XvDDo8qxBuJn59pxddDdDd
+                aM4Rbl41fgyR4aPSu5OLmFdfjheO25VNqN4JFVLXtNKNCHchMuH+ZlV3ZQ+qB8oryiLwy4K5pLIS5RqS
+                dLS8Xgbmfb6PY+6yXorSdDtjILPCz0cvgTSkJyHGEWgAVU3VEPLCu5crRXOf+xQ12rUcAn3eC1OLQ9eD
+                fI4krZayKElXo/oR4DuI3EOShm81ziIciy0sBdVLgP5altHyPg58wfl8c/Phnawu8nkpkoBpRO7HPOO+
+                wj/FVcGHRe6rehP8IrArOv0QziNJ/wy4N4r7MIO7IaPxRtBzgQdptT/J1KQJSQizqcJgyR2CeYjgG6h+
+                CLHPmTsEW4Fvk6S3AQdK09K20vXAhxH5BPYiNWo3wSHgiwPTNA8C0SOofB7zNt1oIEgaiFwEPEmSfhbz
+                0IV/IcakBlkLsgu4GWVLzNQlW7Bye3x/MBofSNpHQE6BjjttWmiifCRr537gFbqdOVrtBiIrgQmMydrO
+                Po/4TRFoTf3mquC8LinsNBUJ1gHFcv1gOSyWcKcO3AtajcZuZ5ZWejvCLpCVORq3A0/San8Wkf2gp937
+                l0aArkZZj8gu0A+DTKA6gslfvxP7MrXIGZTnEdmJU4gEYDPKX5GkNxRejUrSsUw47wa92L/JmeuXhOll
+                woCyYaHbgSTdg+puzDPW5ILH6K3aEiyowDFYjZ5/Bs6CjgXlm8DNwFtptZ9H5D+B38Dk4jkXdBP2eW5k
+                u9mIxHmb8sfGVaHbmSVJ78C8rBs8Ja4g7EB5CJE9JO1/ADkMOofKBoTzUd6Lcj4SXkgWa2bdUSu6vSd9
+                kwsk7QdB3o6KyQ/vmX0DZSvCJMrzwMsk7Z9jLra/AWQzsA13P8zOlVs/TczTb98qvLtnQeUQcAzJXg73
+                V3TGUD6BcDFwkCQ9jfGxrAPOBSa89h1oLVphc0daS4CjSFxgNi5hLziNToZDo7m+leHIa2J2Pvq7Xg4D
+                96J8gny6ZNWtiDyE6gFEjpGkP8PsozeCrEPYAqxHpeHGCVYC76aV7mOqM0e3M08r/TFwLejqgL4GcDHK
+                AyTpN1HdD9LI1vzbEbkE876n70Mh5Mpu2FBdtpJlWDAPKN6H8WEUTc5+0ciFi6IVZ1o5gOgBYFfQGVBW
+                GInAhcAiaMMMdohbAd2CeUbpeGwqCPHvNUB1HyK3gd4NsirWMnU9ynUIKehC1k4Dk/wvCC1wG3kG80TY
+                94agpBy6kzMk6Q0Zs7jER+K7sVuJyIWoXohm0fualeklzQ2uUdCvgPw2SXpLqePdvHZ9D+j92NQ2fnga
+                oFuALZ6W3Kb3n+dQRhB76dq6IPq4HdymDjZGjjgfHkPAAOu4KAKBG2p/dSC+6uZpy7cT0VdJ6VgE7kQY
+                A/mYuU5l8QiorkC4KEOZXbnLnrK3DDhsQ2kgmmBCY05kZO5F9VFErsUmdfRWy07QC7Cvjds1r/aBFAGR
+                ReAo6CY/B6Z+4ARbkimYA90DejjGJ9GP/tVDLlFhtqc6J1C5C5E4fYpTzaUBNFEJcthnA2gmYBTNpIEp
+                T8zpK9BcoGlyAXPP8g5UTxt/VoBIaICMYOKXxlBG3cKw3TaL4iTmOaVOzwcuh4Vu5zjmFeCnLFHmR0in
+                kGlXwfPkwfduAWeLzYzpKPBBlPtopcUn4LodQB8BHgddjDVwcsLKSX/PSMwfXkD1y2BfFcrVKYUc/T3n
+                1c6VZTp1F0E4fgMsizKI+hP+KyurwXqlv0IAZuxNSMxtKI+CLMZ7M+i30ETtA7zZ3y0p/kDhkHEvyOmg
+                jUVEvgQcjASEO3yTJjCGMIZkaZFd+zoHfA34XDQg2Xw0gH9FmAnUyh4pbeuAnAT5CiZ9RNaggjIDWu4w
+                Vl6G7HRBsgESPQJSLX5D2Ifqh4BDbuDzPM9tCDVcXDiByZ76XuxrQMocqiaK3DulT2UDWQ+6nQWEL4O8
+                G2EvwhkndWPas3/WHFGMCaiPA28F/uZVeyig23kFkQ+gchPGR7bgJK43Y4MxdGOyCHoE9CnQWSdFyeqY
+                f5ci/JikfS1JezxqV2QW5HqUO1BOGqmqvo385Jl25zEBs7tRfgeRH2HvboZly5nDLOjL2GSIBulMyQHG
+                2cxs8vOBLGC1h2rw79k+Itv88yAvZfRXgZ+Zde/2zjzoS9kNh4B8mUXkZVQXgzU+B1py4bwAMwht4HpM
+                4Pd8Vt9rhijxtTQFM34nEHnarBveivAIU4XMt4eBK0GeQGQuWhvlAeRnQZ5D5EpUrwFOR8w62x9CK12B
+                8DZ80OAiaJfu5JECyjqQpCOo7sCmzjVcchoTn1Pc/CbK+iJPhwLyDN1O8Wn63m02MPFEVwHvQfU8t/Hs
+                RJiUw/tBfwJyAHgx8gsl7QYqWzN73aqpxxAOVE5HXE7bWmAH6JUgO1Fd61TsUOMTOYxhok9iAkTr3b1a
+                CiTpZlR3IlyBynZEV0R730jxaWA/yo8RfQbkCKqfQuQWYMxLw6xPZt2fReQZ4Ba6nUNxm+0myAUo70R0
+                F8h52MMGP2dnMPFtjwHP0O0cyeqeA/JDlI2BFrQf4X10O0UG02pvRGQ7kJk4cgplb0lqk3HQi3Dmqs4j
+                sodup5rwbKVrEC7C5/efA9nX84XkPCTpCowbI7sdoXMg+3v0aVPWJ2stzaLsKWEgvWhtILoZZCdwJUoC
+                OuYZlt0/egLkeeAnoAeAQ3QnBwcvmxP4S4EPAdtQNafA3uSexjzi+hiqzyJyLPOF70D5LsJ4YKK/tGxG
+                4K8MJCmYyWti7Op1ATOYBk6gWdrhYfOsDwutNpmPqoFhzGvdd8ZPdDw8bZUmAAAA+UlEQVQ7ZVtYdvOv
+                KpjxszROoNnFa7NSplFOGO2BBfeKtTmO/mPgbmBlUaN1v59A9QqmJovXNFrtBuaUsgmsRVmdLdJZ4BWE
+                RZQFpoKXs5MUTC628UBivwI6TXdyKaPw6wetNiBNzGHPRic0jEZ1CuE0sIiyyFTNtWkecW1i7sRuxGce
+                nUU5hrnM79cTZC/q6ASIYdqm/LH/fwzrNfi/AaMhXwd6B2F0PngTHH0cld1MdZbocngNfl3h1ck2+Br8
+                +oGJDftrkHehHDR+H2dPHkW5BeR95ENHXoPXoAa8pmG9BssP5orNjcAHUX0eYTfIwSUHvL4Gv/bwPyF+
+                VbqDlKhiAAAAAElFTkSuQmCC
+            </property>
+        </structure>
+    </list-property>
+</report>
